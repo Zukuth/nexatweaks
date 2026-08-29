@@ -746,45 +746,7 @@ public static class TweakCatalog
 
     public static IReadOnlyList<ITweak> Advanced { get; } = new List<ITweak>
     {
-        new ShellCommandTweak
-        {
-            Id = "adv.defender.realtime",
-            Name = "Desactivar protección en tiempo real de Defender",
-            Description = "Detiene el análisis en tiempo real de Microsoft Defender. Deja el equipo sin protección activa hasta revertirlo. Puede fallar si Tamper Protection está activo (eso es intencional, es una protección de Windows).",
-            Category = TweakCategory.Advanced,
-            Risk = RiskLevel.Risky,
-            DefaultEnabled = false,
-            CaptureState = () => ShellCommandTweak
-                .ExecCapture("powershell -NoProfile -Command \"(Get-MpPreference).DisableRealtimeMonitoring\"")
-                .Trim(),
-            ApplyCommand = () => "powershell -NoProfile -Command \"Set-MpPreference -DisableRealtimeMonitoring $true\"",
-            RevertCommand = prior =>
-                $"powershell -NoProfile -Command \"Set-MpPreference -DisableRealtimeMonitoring ${(prior == "True" ? "true" : "false")}\"",
-        },
-        new ServiceStateTweak
-        {
-            Id = "adv.windowsupdate",
-            Name = "Desactivar servicio de Windows Update",
-            Description = "Pone wuauserv en 'Deshabilitado'. El equipo dejará de recibir actualizaciones automáticas hasta revertirlo.",
-            Category = TweakCategory.Advanced,
-            Risk = RiskLevel.Risky,
-            DefaultEnabled = false,
-            ServiceName = "wuauserv",
-            DesiredStartMode = "Disabled",
-        },
-        new RegistryTweak
-        {
-            Id = "adv.uac.level",
-            Name = "Bajar nivel de aviso de UAC",
-            Description = "Cambia el Control de Cuentas de Usuario a 'Notificar sin atenuar el escritorio' (nivel 2 en vez de 3). No desactiva UAC por completo.",
-            Category = TweakCategory.Advanced,
-            Risk = RiskLevel.Advanced,
-            DefaultEnabled = false,
-            Hive = RegistryHive.LocalMachine,
-            SubKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System",
-            ValueName = "ConsentPromptBehaviorAdmin",
-            EnabledValue = 2,
-        },
+
         new ServiceStateTweak
         {
             Id = "adv.xbox.xblauthmanager",
@@ -796,20 +758,7 @@ public static class TweakCatalog
             ServiceName = "XblAuthManager",
             DesiredStartMode = "Disabled",
         },
-        new RegistryTweak
-        {
-            Id = "adv.coreisolation",
-            Name = "Desactivar Aislamiento del núcleo (Memory Integrity)",
-            Description = "Apaga la virtualización de seguridad de Windows (VBS/HVCI). Puede dar algo de rendimiento en CPUs sensibles a esto, pero reduce la protección real contra código malicioso a nivel de kernel. Requiere reinicio. Lo mismo que el interruptor de Seguridad de Windows > Aislamiento del núcleo.",
-            Category = TweakCategory.Advanced,
-            Risk = RiskLevel.Risky,
-            DefaultEnabled = false,
-            RequiresRestart = true,
-            Hive = RegistryHive.LocalMachine,
-            SubKey = @"SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity",
-            ValueName = "Enabled",
-            EnabledValue = 0,
-        },
+
         new ServiceStateTweak
         {
             Id = "adv.programcompat",
