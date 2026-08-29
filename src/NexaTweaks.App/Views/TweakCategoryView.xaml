@@ -1,0 +1,40 @@
+<UserControl x:Class="NexaTweaks.App.Views.TweakCategoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="32,28,32,20">
+            <TextBlock Text="{Binding Title}" Style="{StaticResource TitleText}"/>
+            <TextBlock Text="{Binding Subtitle}" Style="{StaticResource BodyText}" Margin="0,6,0,0"/>
+            <TextBlock Text="Comprobando el estado actual del sistema..." Style="{StaticResource CaptionText}" Margin="0,8,0,0"
+                       Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" Margin="32,0,32,0" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Cards}" ItemTemplate="{StaticResource TweakCardTemplate}"/>
+        </ScrollViewer>
+
+        <Border Grid.Row="2" Background="{StaticResource BgSidebarBrush}" BorderBrush="{StaticResource BorderBrush2}" BorderThickness="0,1,0,0" Padding="32,14">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock Style="{StaticResource CaptionText}">
+                        <Run Text="{Binding PendingCount, Mode=OneWay}"/>
+                        <Run Text=" cambio(s) pendientes"/>
+                    </TextBlock>
+                    <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource BodyText}" Margin="0,3,0,0"/>
+                </StackPanel>
+                <Button Grid.Column="1" Content="Aplicar cambios" Style="{StaticResource PrimaryButton}"
+                        Command="{Binding ApplyPendingCommand}" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

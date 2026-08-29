@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2FFA1808-490C-4059-B6FB-DF2F2F923E65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NexaTweaks.App", "src\NexaTweaks.App\NexaTweaks.App.csproj", "{80C9A5CB-26E5-4C36-94A9-75A4CD548DAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NexaTweaks.Core", "src\NexaTweaks.Core\NexaTweaks.Core.csproj", "{FBB93768-CAB8-45FC-955D-F3F54BEB736F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NexaTweaks.Tests", "src\NexaTweaks.Tests\NexaTweaks.Tests.csproj", "{C12AAFDD-DB50-4A01-B71B-65B20C9B9DF1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80C9A5CB-26E5-4C36-94A9-75A4CD548DAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80C9A5CB-26E5-4C36-94A9-75A4CD548DAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80C9A5CB-26E5-4C36-94A9-75A4CD548DAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80C9A5CB-26E5-4C36-94A9-75A4CD548DAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBB93768-CAB8-45FC-955D-F3F54BEB736F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBB93768-CAB8-45FC-955D-F3F54BEB736F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBB93768-CAB8-45FC-955D-F3F54BEB736F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBB93768-CAB8-45FC-955D-F3F54BEB736F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C12AAFDD-DB50-4A01-B71B-65B20C9B9DF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C12AAFDD-DB50-4A01-B71B-65B20C9B9DF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C12AAFDD-DB50-4A01-B71B-65B20C9B9DF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C12AAFDD-DB50-4A01-B71B-65B20C9B9DF1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{80C9A5CB-26E5-4C36-94A9-75A4CD548DAA} = {2FFA1808-490C-4059-B6FB-DF2F2F923E65}
+		{FBB93768-CAB8-45FC-955D-F3F54BEB736F} = {2FFA1808-490C-4059-B6FB-DF2F2F923E65}
+		{C12AAFDD-DB50-4A01-B71B-65B20C9B9DF1} = {2FFA1808-490C-4059-B6FB-DF2F2F923E65}
+	EndGlobalSection
+EndGlobal

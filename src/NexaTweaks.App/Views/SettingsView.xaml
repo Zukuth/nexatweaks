@@ -1,0 +1,78 @@
+<UserControl x:Class="NexaTweaks.App.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="32,28,32,28">
+            <TextBlock Text="Ajustes" Style="{StaticResource TitleText}"/>
+            <TextBlock Text="Información de la aplicación, del equipo y accesos rápidos." Style="{StaticResource BodyText}" Margin="0,6,0,24"/>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Nexa Tweaks Suite" Style="{StaticResource SectionHeaderText}"/>
+                    <TextBlock Text="v0.1.0 · .NET 8 / WPF" Style="{StaticResource CaptionText}" Margin="0,4,0,0"/>
+                    <TextBlock Style="{StaticResource BodyText}" Margin="0,10,0,0"
+                               Text="Suite de optimización para Windows: rendimiento, red, input, GPU, limpieza y un sistema de copias de seguridad que revierte cualquier cambio."/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Información del equipo" Style="{StaticResource SectionHeaderText}" FontSize="13"/>
+                    <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="90"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Sistema" Style="{StaticResource CaptionText}" Margin="0,0,0,6"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding OsText}" Style="{StaticResource BodyText}" Margin="0,0,0,6" TextWrapping="Wrap"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="CPU" Style="{StaticResource CaptionText}" Margin="0,0,0,6"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding CpuText}" Style="{StaticResource BodyText}" Margin="0,0,0,6" TextWrapping="Wrap"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="GPU" Style="{StaticResource CaptionText}" Margin="0,0,0,6"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding GpuText}" Style="{StaticResource BodyText}" Margin="0,0,0,6" TextWrapping="Wrap"/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="RAM" Style="{StaticResource CaptionText}" Margin="0,0,0,6"/>
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding RamText}" Style="{StaticResource BodyText}" Margin="0,0,0,6"/>
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Placa madre" Style="{StaticResource CaptionText}"/>
+                        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding MotherboardText}" Style="{StaticResource BodyText}" TextWrapping="Wrap"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Permisos" Style="{StaticResource SectionHeaderText}" FontSize="13"/>
+                    <TextBlock Text="{Binding AdminStatus}" Style="{StaticResource BodyText}" Margin="0,6,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Carpeta de copias de seguridad" Style="{StaticResource SectionHeaderText}" FontSize="13"/>
+                    <TextBlock Text="{Binding BackupFolder}" Style="{StaticResource CaptionText}" Margin="0,6,0,10" TextWrapping="Wrap"/>
+                    <Button Content="Abrir carpeta" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Left" Command="{Binding OpenBackupFolderCommand}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorder}">
+                <StackPanel>
+                    <TextBlock Text="Diagnóstico y soporte" Style="{StaticResource SectionHeaderText}" FontSize="13"/>
+                    <TextBlock Text="Genera un .zip con la información del equipo y el registro de errores reciente, listo para enviar a soporte." Style="{StaticResource BodyText}" Margin="0,6,0,10"/>
+                    <Button Content="Exportar diagnóstico" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Left" Command="{Binding ExportSupportBundleCommand}"/>
+                    <TextBlock Text="{Binding ExportStatus}" Style="{StaticResource CaptionText}" Margin="0,8,0,0" TextWrapping="Wrap"
+                               Visibility="{Binding ExportStatus, Converter={StaticResource NullToVisibilityConverter}}"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

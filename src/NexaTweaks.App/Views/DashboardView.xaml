@@ -1,0 +1,149 @@
+<UserControl x:Class="NexaTweaks.App.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctrl="clr-namespace:NexaTweaks.App.Controls">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="32,28,32,28">
+            <TextBlock Text="Dashboard" Style="{StaticResource TitleText}"/>
+            <TextBlock Text="Estado del sistema en vivo y aplicación rápida de los tweaks seguros recomendados." Style="{StaticResource BodyText}" Margin="0,6,0,24"/>
+
+            <UniformGrid Columns="5" Rows="1">
+                <Border Style="{StaticResource CardBorder}" Margin="0,0,10,0">
+                    <StackPanel>
+                        <TextBlock Text="CPU" Style="{StaticResource CaptionText}"/>
+                        <TextBlock Text="{Binding CpuPercent, StringFormat={}{0:F0}%}" Style="{StaticResource StatValueText}"/>
+                        <ctrl:Sparkline x:Name="CpuSpark" Height="34" Stroke="{StaticResource AccentVioletBrush}" MaxValue="100" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource CardBorder}" Margin="5,0">
+                    <StackPanel>
+                        <TextBlock Text="RAM" Style="{StaticResource CaptionText}"/>
+                        <TextBlock Text="{Binding RamPercent, StringFormat={}{0:F0}%}" Style="{StaticResource StatValueText}"/>
+                        <TextBlock Style="{StaticResource CaptionText}" Margin="0,2,0,0">
+                            <Run Text="{Binding RamUsedGb, StringFormat={}{0:F1}, Mode=OneWay}"/>
+                            <Run Text=" / "/>
+                            <Run Text="{Binding RamTotalGb, StringFormat={}{0:F1} GB, Mode=OneWay}"/>
+                        </TextBlock>
+                        <ctrl:Sparkline x:Name="RamSpark" Height="24" Stroke="{StaticResource AccentCyanBrush}" MaxValue="100" Margin="0,6,0,0"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource CardBorder}" Margin="5,0">
+                    <StackPanel>
+                        <TextBlock Text="GPU" Style="{StaticResource CaptionText}"/>
+                        <TextBlock Text="{Binding GpuPercent, StringFormat={}{0:F0}%}" Style="{StaticResource StatValueText}"/>
+                        <ctrl:Sparkline x:Name="GpuSpark" Height="34" Stroke="{StaticResource SafeBrush}" MaxValue="100" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource CardBorder}" Margin="5,0">
+                    <StackPanel>
+                        <TextBlock Text="TEMP. CPU" Style="{StaticResource CaptionText}"/>
+                        <TextBlock Text="{Binding CpuTempCelsius, Converter={StaticResource NullableTempConverter}}" Style="{StaticResource StatValueText}"/>
+                        <TextBlock Text="No disponible en este equipo" Style="{StaticResource CaptionText}" Margin="0,8,0,0" TextWrapping="Wrap"
+                                   Visibility="{Binding CpuTempCelsius, Converter={StaticResource InverseNullToVisibilityConverter}}"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource CardBorder}" Margin="10,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="PING" Style="{StaticResource CaptionText}"/>
+                        <TextBlock Style="{StaticResource StatValueText}">
+                            <Run Text="{Binding PingMs, Mode=OneWay}"/>
+                            <Run Text=" ms" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}"/>
+                        </TextBlock>
+                        <TextBlock Text="1.1.1.1" Style="{StaticResource CaptionText}" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,20,0,0" BorderBrush="{StaticResource AdvancedBrush}"
+                    Visibility="{Binding BottleneckMessage, Converter={StaticResource NullToVisibilityConverter}}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="⚠" Foreground="{StaticResource AdvancedBrush}" FontSize="16" Margin="0,0,10,0"/>
+                    <TextBlock Text="{Binding BottleneckMessage}" Style="{StaticResource BodyText}" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,20,0,0">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="Análisis de optimización" Style="{StaticResource SectionHeaderText}"/>
+                            <TextBlock Text="Descubre qué te falta optimizar y compará el antes/después antes de aplicar nada." Style="{StaticResource BodyText}" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <Button Grid.Column="1" Content="Analizar mi PC" Style="{StaticResource PrimaryButton}" VerticalAlignment="Center"
+                                Command="{Binding AnalyzeCommand}" IsEnabled="{Binding IsAnalyzing, Converter={StaticResource InverseBoolConverter}}"/>
+                    </Grid>
+
+                    <Grid Margin="0,24,0,0" Visibility="{Binding HasAnalyzed, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" HorizontalAlignment="Center" Margin="0,0,28,0">
+                            <Grid Width="130" Height="130">
+                                <ctrl:RadialGauge Value="{Binding OptimizationScore}" TrackBrush="{StaticResource BorderBrush2}" ValueBrush="{StaticResource AccentVioletBrush}" StrokeThickness="12"/>
+                                <TextBlock Text="{Binding OptimizationScore, StringFormat={}{0:F0}%}" Style="{StaticResource StatValueText}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                            <TextBlock Text="Ahora" Style="{StaticResource CaptionText}" HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,28,0">
+                            <Grid Width="130" Height="130">
+                                <ctrl:RadialGauge Value="100" TrackBrush="{StaticResource BorderBrush2}" ValueBrush="{StaticResource SafeBrush}" StrokeThickness="12"/>
+                                <TextBlock Text="100%" Style="{StaticResource StatValueText}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                            <TextBlock Text="Si optimizás" Style="{StaticResource CaptionText}" HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource BodyText}">
+                                <Run Text="{Binding AppliedRecommendedCount, Mode=OneWay}"/>
+                                <Run Text=" de "/>
+                                <Run Text="{Binding TotalRecommendedCount, Mode=OneWay}"/>
+                                <Run Text=" optimizaciones recomendadas ya están aplicadas."/>
+                            </TextBlock>
+                            <Border Background="{StaticResource BgWindowBrush}" CornerRadius="8" Padding="12" Margin="0,10,0,0" MaxHeight="150"
+                                    Visibility="{Binding MissingOptimizations.Count, Converter={StaticResource NonZeroToVisibilityConverter}}">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl ItemsSource="{Binding MissingOptimizations}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Style="{StaticResource CaptionText}" Margin="0,2">
+                                                    <Run Text="•  "/>
+                                                    <Run Text="{Binding Name, Mode=OneWay}" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                    <Run Text=" · "/>
+                                                    <Run Text="{Binding CategoryLabel, Mode=OneWay}"/>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="0,20,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource BodyText}" Foreground="{StaticResource SafeBrush}"
+                                       Visibility="{Binding StatusMessage, Converter={StaticResource NullToVisibilityConverter}}"/>
+                            <TextBlock Text="{Binding DeltaMessage}" Style="{StaticResource CaptionText}" Margin="0,4,0,0"
+                                       Visibility="{Binding DeltaMessage, Converter={StaticResource NullToVisibilityConverter}}"/>
+                        </StackPanel>
+                        <Button Grid.Column="1" Content="Aplicar recomendado" Style="{StaticResource PrimaryButton}" VerticalAlignment="Center"
+                                Command="{Binding ApplyRecommendedCommand}" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
+                                Visibility="{Binding HasAnalyzed, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

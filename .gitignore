@@ -1,0 +1,18 @@
+# Build outputs
+[Bb]in/
+[Oo]bj/
+publish/
+dist/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Rider / VS Code
+.idea/
+.vscode/
+
+# OS
+Thumbs.db
+.DS_Store
