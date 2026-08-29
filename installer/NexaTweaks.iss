@@ -21,6 +21,12 @@ UninstallDisplayIcon={app}\{#MyAppExeName}
 Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=modern
+SignedUninstaller=yes
+; "signtool" must be configured once per machine in the Inno Setup IDE:
+; Tools > Configure Sign Tools > add a tool named "signtool" with a command like:
+;   signtool.exe sign /f "C:\path\to\NexaTweaksCodeSign.pfx" /p $qCODESIGN_PASSWORD$q /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 $f
+; (Inno Setup expands $f to the file path; using an env var keeps the password out of this script.)
+SignTool=signtool
 
 [Languages]
 Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
@@ -29,8 +35,8 @@ Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 Name: "desktopicon"; Description: "Crear un acceso directo en el Escritorio"; GroupDescription: "Accesos directos adicionales:"
 
 [Files]
-Source: "..\publish\*.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\publish\*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\publish\*.exe"; DestDir: "{app}"; Flags: ignoreversion signonce
+Source: "..\publish\*.dll"; DestDir: "{app}"; Flags: ignoreversion signonce
 Source: "..\publish\*.json"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
