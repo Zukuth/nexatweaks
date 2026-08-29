@@ -57,7 +57,9 @@ Los binarios (`NexaTweaks.exe`, DLLs propias) y el instalador se firman con `sig
 signtool sign /f "<ruta al .pfx>" /p "<password>" /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 "archivo.exe"
 ```
 
-Actualmente se usa un **certificado autofirmado**: garantiza que el binario no fue alterado, pero Windows SmartScreen igual muestra "editor no reconocido" porque no proviene de una entidad certificadora de confianza. La vía gratuita para eliminar ese aviso es aplicar al programa para proyectos open source de [SignPath.io](https://signpath.io/oss) (requiere licencia OSI, ya cubierta por este repo con `LICENSE` MIT, y conectar el repo a su CI).
+Actualmente se usa un **certificado autofirmado**: garantiza que el binario no fue alterado, pero Windows SmartScreen igual muestra "editor no reconocido" porque no proviene de una entidad certificadora de confianza.
+
+Este proyecto está aplicando al programa de firma de código gratuito para proyectos open source de **[SignPath Foundation](https://signpath.org/)** — una vez aprobado, los binarios e instaladores de las releases se firmarán con un certificado de una CA de confianza provisto por SignPath, sin costo, gracias a la licencia MIT de este repositorio.
 
 Para que `installer/NexaTweaks.iss` firme automáticamente el instalador generado, configura una vez en el IDE de Inno Setup: **Tools > Configure Sign Tools**, agregando una herramienta llamada `signtool` (ver comentario en el propio `.iss`).
 
