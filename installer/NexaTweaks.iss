@@ -1,5 +1,9 @@
 #define MyAppName "Nexa Tweaks"
-#define MyAppVersion "0.1.0"
+; Override from the command line with /DMyAppVersion=X.Y.Z so this always matches
+; Directory.Build.props / NexaTweaks.App.csproj instead of drifting out of sync with them.
+#ifndef MyAppVersion
+  #define MyAppVersion "0.1.0"
+#endif
 #define MyAppPublisher "Nexa Tweaks"
 #define MyAppExeName "NexaTweaks.exe"
 
@@ -15,7 +19,7 @@ PrivilegesRequired=admin
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 OutputDir=..\dist
-OutputBaseFilename=NexaTweaks-Setup-0.1.0
+OutputBaseFilename=NexaTweaks-Setup-{#MyAppVersion}
 SetupIconFile=..\src\NexaTweaks.App\Assets\icon.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 Compression=lzma2/max

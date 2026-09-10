@@ -16,9 +16,9 @@
     <Platforms>x64</Platforms>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
-    <Version>0.1.0</Version>
-    <AssemblyVersion>0.1.0.0</AssemblyVersion>
-    <FileVersion>0.1.0.0</FileVersion>
+    <Version>$(NexaTweaksVersion)</Version>
+    <AssemblyVersion>$(NexaTweaksVersion).0</AssemblyVersion>
+    <FileVersion>$(NexaTweaksVersion).0</FileVersion>
     <Product>Nexa Tweaks</Product>
     <Company>Nexa Tweaks</Company>
   </PropertyGroup>

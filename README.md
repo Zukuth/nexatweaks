@@ -3,6 +3,7 @@
 Suite de optimización y mantenimiento para Windows, escrita en C# / WPF (.NET 8).
 Centraliza en una sola app tweaks de sistema, limpieza, monitoreo, gestión de arranque, backups y reparación — todo con vista previa antes de aplicar cambios y opción de deshacer.
 
+![CI](https://github.com/Zukuth/nexatweaks/actions/workflows/ci.yml/badge.svg)
 ![version](https://img.shields.io/badge/versi%C3%B3n-0.1.0-blue)
 ![platform](https://img.shields.io/badge/plataforma-Windows%20x64-0078D6)
 
@@ -21,10 +22,12 @@ Centraliza en una sola app tweaks de sistema, limpieza, monitoreo, gestión de a
 
 ## Arquitectura
 
-- `src/NexaTweaks.Core` — lógica de negocio: motor de tweaks (`TweakEngine`), catálogos, cleanup, backup, monitoreo, diagnóstico y booster. Sin dependencias de UI.
+- `src/NexaTweaks.Core` — lógica de negocio: motor de tweaks (`TweakEngine`), catálogos, cleanup, backup, monitoreo, diagnóstico y booster. Sin dependencias de UI. El catálogo de tweaks (`Catalog/TweakCatalog.*.cs`) está partido en un archivo parcial por categoría (Windows, Network, Input, Gpu, Cleanup, Advanced) para que cada uno sea chico y fácil de revisar en un PR.
 - `src/NexaTweaks.App` — cliente WPF (MVVM con `CommunityToolkit.Mvvm`): vistas, view models y servicios de la app.
 - `src/NexaTweaks.Tests` — pruebas unitarias sobre el motor de tweaks, catálogos y componentes de cleanup/backup.
 - `installer/` — script de Inno Setup para generar el instalador de Windows.
+- `Directory.Build.props` — versión del producto en un solo lugar (`NexaTweaksVersion`); `NexaTweaks.App.csproj` la lee de ahí y `installer/NexaTweaks.iss` la recibe por línea de comandos (`/DMyAppVersion=X.Y.Z`) para que el `.exe` y el instalador nunca queden desincronizados.
+- `.github/workflows/ci.yml` — build + tests en cada push/PR a `master`.
 
 ## Requisitos
 
@@ -47,7 +50,13 @@ dotnet test src/NexaTweaks.Tests
 
 ## Instalador
 
-La release incluye `NexaTweaks-Setup-<versión>.exe`, generado con Inno Setup a partir de la publicación self-contained de `NexaTweaks.App` (`installer/NexaTweaks.iss`).
+La release incluye `NexaTweaks-Setup-<versión>.exe`, generado con Inno Setup a partir de la publicación self-contained de `NexaTweaks.App` (`installer/NexaTweaks.iss`). Para que el nombre del instalador coincida con la versión del `.csproj`, compilarlo con:
+
+```bash
+ISCC installer\NexaTweaks.iss /DMyAppVersion=0.1.0
+```
+
+(si se omite `/DMyAppVersion`, usa el valor por defecto embebido en el propio `.iss`).
 
 ## Firma de código
 
