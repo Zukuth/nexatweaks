@@ -57,6 +57,17 @@ public sealed class ShellCommandTweak : TweakBase
             CreateNoWindow = true,
         };
         using var process = Process.Start(psi)!;
+        var stderr = process.StandardError.ReadToEnd();
         process.WaitForExit();
+
+        // A non-zero exit code means the underlying command failed (bad syntax, access denied,
+        // target not found, etc.). Without this check TweakEngine sees no exception and reports
+        // the apply/revert as successful even though nothing actually changed.
+        if (process.ExitCode != 0)
+        {
+            throw new InvalidOperationException(
+                $"El comando terminó con código {process.ExitCode}: {command}"
+                + (string.IsNullOrWhiteSpace(stderr) ? "" : $"\n{stderr.Trim()}"));
+        }
     }
 }
