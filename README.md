@@ -17,6 +17,7 @@ Centraliza en una sola app tweaks de sistema, limpieza, monitoreo, gestión de a
 - **Booster** — perfiles de juego y boost de procesos (prioridad, working-set trim) para sesiones de gaming.
 - **Apps / Autorun** — gestión de aplicaciones instaladas y de programas que arrancan con Windows.
 - **Repair** — catálogo de acciones de reparación rápida del sistema.
+- **Estabilidad** — analiza visor de eventos, registro y WMI para explicar pantallazos azules, cuelgues y reinicios (códigos de parada, TPM, WHEA, apps que se cierran, RAM mezclada, TdrDelay, políticas de Windows Update, drivers/BIOS antiguos, Windows modificado) y ofrece arreglos reversibles cuando son seguros.
 - **Backup** — snapshots antes/después de cada tanda de cambios y gestión de puntos de restauración de Windows.
 - **Advanced / Settings** — exportación de reportes de soporte (logs, info del sistema) y preferencias de la app.
 

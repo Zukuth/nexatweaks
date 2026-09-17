@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using NexaTweaks.App.Services;
 using NexaTweaks.Core.Backup;
 using NexaTweaks.Core.Catalog;
+using NexaTweaks.Core.Stability;
 using NexaTweaks.Core.Tweaks;
 
 namespace NexaTweaks.App.ViewModels;
@@ -85,6 +86,7 @@ public partial class BackupViewModel : ObservableObject
             .Concat(TweakCatalog.Gpu)
             .Concat(TweakCatalog.Cleanup)
             .Concat(TweakCatalog.Advanced)
+            .Concat(StabilityFixes.All)
             .Concat(StartupItemDiscovery.Discover());
 
         var dict = new Dictionary<string, ITweak>();

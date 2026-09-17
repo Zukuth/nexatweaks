@@ -47,6 +47,7 @@ public partial class MainWindow : Window
         "Apps" => new AppsView(new AppsViewModel()),
         "Autorun" => new AutorunView(new AutorunViewModel()),
         "Repair" => new RepairView(new RepairViewModel()),
+        "Stability" => new StabilityView(new StabilityViewModel()),
         "Backup" => new BackupView(new BackupViewModel()),
         "Advanced" => new TweakCategoryView(new TweakCategoryViewModel(
             "Avanzado", "Tweaks de mayor riesgo (Defender, Windows Update, UAC, Xbox). Desactivados por defecto y con confirmación extra.",

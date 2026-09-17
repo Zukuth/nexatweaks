@@ -94,6 +94,12 @@
                             <TextBlock Text="Reparación"/>
                         </StackPanel>
                     </RadioButton>
+                    <RadioButton x:Name="NavStability" Style="{StaticResource NavItemButton}" Checked="Nav_Checked" Tag="Stability">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="6" Height="6" Fill="{StaticResource RiskyBrush}" Margin="0,0,10,0"/>
+                            <TextBlock Text="Estabilidad"/>
+                        </StackPanel>
+                    </RadioButton>
                     <RadioButton x:Name="NavBackup" Style="{StaticResource NavItemButton}" Checked="Nav_Checked" Tag="Backup">
                         <StackPanel Orientation="Horizontal">
                             <Ellipse Width="6" Height="6" Fill="{StaticResource AccentVioletBrush}" Margin="0,0,10,0"/>
