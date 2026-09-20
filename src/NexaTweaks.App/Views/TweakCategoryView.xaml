@@ -10,9 +10,10 @@
 
         <StackPanel Grid.Row="0" Margin="32,28,32,20">
             <TextBlock Text="{Binding Title}" Style="{StaticResource TitleText}"/>
-            <TextBlock Text="{Binding Subtitle}" Style="{StaticResource BodyText}" Margin="0,6,0,0"/>
-            <TextBlock Text="Comprobando el estado actual del sistema..." Style="{StaticResource CaptionText}" Margin="0,8,0,0"
-                       Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <!-- Total de opciones siempre a la vista, bajo el título. -->
+            <TextBlock Text="{Binding HeaderSummary}" Style="{StaticResource CaptionText}" Margin="0,4,0,0"
+                       Foreground="{StaticResource AccentCyanBrush}" FontWeight="SemiBold"/>
+            <TextBlock Text="{Binding Subtitle}" Style="{StaticResource BodyText}" Margin="0,8,0,0"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" Margin="32,0,32,0" VerticalScrollBarVisibility="Auto">

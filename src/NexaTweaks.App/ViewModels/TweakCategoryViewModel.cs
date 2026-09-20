@@ -6,6 +6,7 @@ using NexaTweaks.App.Services;
 using NexaTweaks.App.Views;
 using NexaTweaks.Core;
 using NexaTweaks.Core.Backup;
+using NexaTweaks.Core.Catalog;
 using NexaTweaks.Core.Diagnostics;
 using NexaTweaks.Core.Tweaks;
 
@@ -25,6 +26,14 @@ public partial class TweakCategoryViewModel : ObservableObject
 
     public int PendingCount => Cards.Count(c => c.IsPending);
 
+    [ObservableProperty] private string headerSummary = "";
+
+    private void RefreshHeaderSummary() => HeaderSummary = CategorySummary.Format(
+        total: Cards.Count,
+        applied: Cards.Count(c => c.IsAvailable && c.IsAppliedAndSynced),
+        unavailable: Cards.Count(c => !c.IsAvailable),
+        isChecking: IsBusy);
+
     public TweakCategoryViewModel(string title, string subtitle, IReadOnlyList<ITweak> tweaks)
     {
         Title = title;
@@ -38,12 +47,19 @@ public partial class TweakCategoryViewModel : ObservableObject
             var card = new TweakCardViewModel(t, t.DefaultEnabled) { LastAppliedSelection = t.DefaultEnabled };
             card.PropertyChanged += (_, e) =>
             {
-                if (e.PropertyName == nameof(TweakCardViewModel.IsPending))
+                if (e.PropertyName is nameof(TweakCardViewModel.IsPending)
+                    or nameof(TweakCardViewModel.IsAppliedAndSynced)
+                    or nameof(TweakCardViewModel.IsAvailable))
+                {
                     OnPropertyChanged(nameof(PendingCount));
+                    RefreshHeaderSummary();
+                }
             };
             return card;
         }));
 
+        IsBusy = true;
+        RefreshHeaderSummary();
         _ = LoadRealStateAsync();
     }
 
@@ -87,6 +103,7 @@ public partial class TweakCategoryViewModel : ObservableObject
         }
 
         IsBusy = false;
+        RefreshHeaderSummary();
         if (unavailable > 0)
             ActivityLog.Instance.Info($"{Title}: {unavailable} ajuste(s) no aplican a este equipo y quedan deshabilitados.");
     }

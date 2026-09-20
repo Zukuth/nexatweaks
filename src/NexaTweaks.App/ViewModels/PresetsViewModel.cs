@@ -21,6 +21,14 @@ public partial class PresetCardViewModel : ObservableObject
     public int Count => Preset.Tweaks.Count;
     public string CountText => $"{Count} ajustes";
 
+    /// <summary>Drives the card colour: verde el conservador, azul el intermedio, rojo el agresivo.</summary>
+    public string Tone => Preset.Id switch
+    {
+        "preset.seguro" => "Safe",
+        "preset.medio" => "Medium",
+        _ => "Extreme",
+    };
+
     /// <summary>A few names so the card shows what it actually does, not just a number.</summary>
     public IReadOnlyList<string> Highlights { get; }
     public IReadOnlyList<PresetCategoryRow> Categories { get; }
