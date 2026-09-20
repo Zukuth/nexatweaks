@@ -11,11 +11,12 @@ Centraliza en una sola app tweaks de sistema, limpieza, monitoreo, gestión de a
 
 - **Dashboard** — estado general del equipo de un vistazo.
 - **Windows (Tweaks)** — catálogo de ajustes del sistema (registro, servicios, tareas programadas, planes de energía, Nagle, comandos), aplicables y reversibles.
-- **Presets** — tres niveles listos para aplicar de una vez (Seguro 66, Medio 91, Extremo 124 ajustes). Cada nivel incluye el anterior; ninguno toca la categoría Avanzado, el debloatware, los cambios irreversibles ni los permisos de cámara/micrófono.
-- **Debloatware** — desinstala apps preinstaladas de la Tienda (28), quitando también su copia aprovisionada para que Windows no las reponga. Es de ida: se marcan como no reversibles y nunca vienen activadas.
-- **Privacidad** — telemetría, Copilot, Recall, widgets, contenido sugerido y permisos de las apps de la Tienda (23 ajustes).
-- **Servicios** — servicios de Windows que un PC doméstico no necesita, con su modo de inicio anterior guardado (27 ajustes). Windows Update, Defender, el firewall y el registro de eventos quedan fuera a propósito, y hay una prueba que lo impide.
-- **Interfaz** — barra de tareas y Explorador (alineación, extensiones, archivos ocultos, Vista de tareas, Chat).
+- **Presets** — tres niveles acumulativos listos para aplicar de una vez, con color propio (Seguro verde, Medio azul, Extremo rojo). Ninguno toca la categoría Avanzado, los navegadores, el debloatware, los cambios irreversibles ni los permisos de cámara/micrófono.
+- **Debloatware** — desinstala apps preinstaladas de la Tienda (48), quitando también su copia aprovisionada para que Windows no las reponga, más OneDrive con su propio desinstalador. Es de ida: se marcan como no reversibles y nunca vienen activadas.
+- **Privacidad** — telemetría, permisos de las apps de la Tienda y las funciones de IA de Windows: Copilot, Recall, Click to Do, la IA del Bloc de notas y las de Paint, con las claves de directiva documentadas por Microsoft (46 ajustes).
+- **Servicios** — servicios de Windows que un PC doméstico no necesita, con su modo de inicio anterior guardado (27 ajustes). Windows Update, Defender, el firewall y el registro de eventos quedan fuera a propósito, y hay una prueba que lo impide. Los que no existen en el equipo se muestran deshabilitados y marcados como «no disponible».
+- **Interfaz** — barra de tareas, Explorador, menú contextual clásico, tema oscuro y pantalla de bloqueo (22 ajustes).
+- **Navegadores** — políticas oficiales de Edge, Chrome y Brave: telemetría, sincronización, modo en segundo plano y funciones promocionales (20 ajustes). Nunca tocan SafeBrowsing, SmartScreen, los avisos de certificado ni el gestor de contraseñas, y los presets no las incluyen.
 - **Network** — benchmark de servidores DNS y utilidades de ping/latencia.
 - **Input / Gpu** — monitoreo de uso de GPU y estadísticas del sistema en tiempo real, incluida temperatura de CPU.
 - **Cleanup** — limpieza de archivos temporales y caché de navegadores, analizador de espacio en disco, escáner de registro y listado de apps instaladas.
