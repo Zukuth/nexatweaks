@@ -7,6 +7,15 @@
 #define MyAppPublisher "Nexa Tweaks"
 #define MyAppExeName "NexaTweaks.exe"
 
+; La firma es opcional: compila con /DSIGN para firmar (requiere la herramienta "signtool"
+; configurada en el IDE de Inno Setup, ver abajo). Sin ese define el instalador se genera sin
+; firmar, que es lo que necesita cualquier equipo donde todavía no esté el certificado.
+#ifdef SIGN
+  #define SignFlag "signonce"
+#else
+  #define SignFlag ""
+#endif
+
 [Setup]
 AppId={{5F0D9C36-9C1E-4B7E-9C0B-2A9C7B8C6E11}
 AppName={#MyAppName}
@@ -25,12 +34,14 @@ UninstallDisplayIcon={app}\{#MyAppExeName}
 Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=modern
-SignedUninstaller=yes
+#ifdef SIGN
 ; "signtool" must be configured once per machine in the Inno Setup IDE:
 ; Tools > Configure Sign Tools > add a tool named "signtool" with a command like:
 ;   signtool.exe sign /f "C:\path\to\NexaTweaksCodeSign.pfx" /p $qCODESIGN_PASSWORD$q /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 $f
 ; (Inno Setup expands $f to the file path; using an env var keeps the password out of this script.)
+SignedUninstaller=yes
 SignTool=signtool
+#endif
 
 [Languages]
 Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
@@ -39,8 +50,8 @@ Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 Name: "desktopicon"; Description: "Crear un acceso directo en el Escritorio"; GroupDescription: "Accesos directos adicionales:"
 
 [Files]
-Source: "..\publish\*.exe"; DestDir: "{app}"; Flags: ignoreversion signonce
-Source: "..\publish\*.dll"; DestDir: "{app}"; Flags: ignoreversion signonce
+Source: "..\publish\*.exe"; DestDir: "{app}"; Flags: ignoreversion {#SignFlag}
+Source: "..\publish\*.dll"; DestDir: "{app}"; Flags: ignoreversion {#SignFlag}
 Source: "..\publish\*.json"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
