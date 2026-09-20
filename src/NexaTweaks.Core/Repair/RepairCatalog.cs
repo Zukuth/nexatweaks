@@ -133,6 +133,57 @@ public static class RepairCatalog
         },
         new()
         {
+            Id = "repair.cleanmgr",
+            Name = "Liberar espacio en disco",
+            Description = "Abre el Liberador de espacio de Windows con todas las categorías marcadas (archivos temporales, actualizaciones antiguas, papelera).",
+            Risk = RiskLevel.Safe,
+            Executable = "cleanmgr.exe",
+            Arguments = "/verylowdisk",
+            EstimatedDuration = "2-10 min",
+        },
+        new()
+        {
+            Id = "repair.temp",
+            Name = "Vaciar archivos temporales",
+            Description = "Borra el contenido de la carpeta TEMP del usuario y del sistema. Los archivos en uso se omiten.",
+            Risk = RiskLevel.Safe,
+            Executable = "cmd.exe",
+            Arguments = "/c del /q /f /s \"%TEMP%\\*\" & del /q /f /s \"%SystemRoot%\\Temp\\*\"",
+            EstimatedDuration = "~30 seg",
+        },
+        new()
+        {
+            Id = "repair.recyclebin",
+            Name = "Vaciar la papelera de reciclaje",
+            Description = "Elimina definitivamente lo que haya en la papelera de todas las unidades.",
+            Risk = RiskLevel.Advanced,
+            Executable = "powershell.exe",
+            Arguments = "-NoProfile -Command \"Clear-RecycleBin -Force -ErrorAction SilentlyContinue\"",
+            EstimatedDuration = "~15 seg",
+        },
+        new()
+        {
+            Id = "repair.network.full",
+            Name = "Restablecer la red por completo",
+            Description = "Reinicia Winsock y TCP/IP, vacía la caché DNS y renueva la IP. Deja la conexión como recién instalada.",
+            Risk = RiskLevel.Advanced,
+            Executable = "cmd.exe",
+            Arguments = "/c netsh winsock reset & netsh int ip reset & ipconfig /flushdns & ipconfig /release & ipconfig /renew",
+            EstimatedDuration = "~30 seg (requiere reiniciar)",
+            RequiresRestart = true,
+        },
+        new()
+        {
+            Id = "repair.spooler",
+            Name = "Reiniciar la cola de impresión",
+            Description = "Detiene la cola, borra los trabajos atascados y la vuelve a arrancar. Para cuando una impresión se queda colgada.",
+            Risk = RiskLevel.Safe,
+            Executable = "cmd.exe",
+            Arguments = "/c net stop spooler & del /q /f /s \"%SystemRoot%\\System32\\spool\\PRINTERS\\*\" & net start spooler",
+            EstimatedDuration = "~15 seg",
+        },
+        new()
+        {
             Id = "repair.explorer",
             Name = "Reiniciar Explorador y barra de tareas",
             Description = "Reinicia explorer.exe para reparar menú Inicio, barra de tareas o escritorio sin reiniciar Windows.",

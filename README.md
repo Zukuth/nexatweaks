@@ -11,13 +11,21 @@ Centraliza en una sola app tweaks de sistema, limpieza, monitoreo, gestión de a
 
 - **Dashboard** — estado general del equipo de un vistazo.
 - **Windows (Tweaks)** — catálogo de ajustes del sistema (registro, servicios, tareas programadas, planes de energía, Nagle, comandos), aplicables y reversibles.
+- **Presets** — tres niveles acumulativos listos para aplicar de una vez, con color propio (Seguro verde, Medio azul, Extremo rojo). Ninguno toca la categoría Avanzado, los navegadores, el debloatware, los cambios irreversibles ni los permisos de cámara/micrófono.
+- **Debloatware** — desinstala apps preinstaladas de la Tienda (48), quitando también su copia aprovisionada para que Windows no las reponga, más OneDrive con su propio desinstalador. Es de ida: se marcan como no reversibles y nunca vienen activadas.
+- **Privacidad** — telemetría, permisos de las apps de la Tienda y las funciones de IA de Windows: Copilot, Recall, Click to Do, la IA del Bloc de notas y las de Paint, con las claves de directiva documentadas por Microsoft (46 ajustes).
+- **Servicios** — servicios de Windows que un PC doméstico no necesita, con su modo de inicio anterior guardado (27 ajustes). Windows Update, Defender, el firewall y el registro de eventos quedan fuera a propósito, y hay una prueba que lo impide. Los que no existen en el equipo se muestran deshabilitados y marcados como «no disponible».
+- **Interfaz** — barra de tareas, Explorador, menú contextual clásico, tema oscuro y pantalla de bloqueo (22 ajustes).
+- **Navegadores** — políticas oficiales de Edge, Chrome y Brave: telemetría, sincronización, modo en segundo plano y funciones promocionales (20 ajustes). Nunca tocan SafeBrowsing, SmartScreen, los avisos de certificado ni el gestor de contraseñas, y los presets no las incluyen.
 - **Network** — benchmark de servidores DNS y utilidades de ping/latencia.
 - **Input / Gpu** — monitoreo de uso de GPU y estadísticas del sistema en tiempo real, incluida temperatura de CPU.
 - **Cleanup** — limpieza de archivos temporales y caché de navegadores, analizador de espacio en disco, escáner de registro y listado de apps instaladas.
 - **Booster** — perfiles de juego y boost de procesos (prioridad, working-set trim) para sesiones de gaming.
 - **Apps / Autorun** — gestión de aplicaciones instaladas y de programas que arrancan con Windows.
 - **Repair** — catálogo de acciones de reparación rápida del sistema.
+- **Estabilidad** — analiza visor de eventos, registro y WMI para explicar pantallazos azules, cuelgues y reinicios (códigos de parada, TPM, WHEA, apps que se cierran, RAM mezclada, TdrDelay, políticas de Windows Update, drivers/BIOS antiguos, Windows modificado) y ofrece arreglos reversibles cuando son seguros.
 - **Backup** — snapshots antes/después de cada tanda de cambios y gestión de puntos de restauración de Windows.
+- **Registro** — panel inferior fijo con lo que va haciendo la app (aplicar, revertir, reparar, analizar), con copiar y limpiar, y casilla de punto de restauración que se crea antes del primer cambio de cada sesión.
 - **Advanced / Settings** — exportación de reportes de soporte (logs, info del sistema) y preferencias de la app.
 
 ## Arquitectura

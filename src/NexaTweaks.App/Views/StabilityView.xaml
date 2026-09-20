@@ -1,0 +1,101 @@
+<UserControl x:Class="NexaTweaks.App.Views.StabilityView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:NexaTweaks.App.ViewModels">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type vm:StabilityFindingViewModel}">
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,10">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" CornerRadius="8" Padding="7,2" Margin="0,0,10,0" VerticalAlignment="Top">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="{StaticResource TextMutedBrush}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Severity}" Value="High">
+                                            <Setter Property="Background" Value="{StaticResource RiskyBrush}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Severity}" Value="Medium">
+                                            <Setter Property="Background" Value="{StaticResource AdvancedBrush}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Severity}" Value="Low">
+                                            <Setter Property="Background" Value="{StaticResource AccentCyanBrush}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock Text="{Binding SeverityLabel}" FontSize="9.5" FontWeight="Bold" Foreground="White"/>
+                        </Border>
+                        <TextBlock Grid.Column="1" Text="{Binding Title}" Style="{StaticResource SectionHeaderText}"
+                                   FontSize="13.5" TextWrapping="Wrap" Margin="0,0,16,0"/>
+                        <Button Grid.Column="2" Content="Arreglar" Style="{StaticResource SecondaryButton}" VerticalAlignment="Top"
+                                ToolTip="{Binding FixName}"
+                                Visibility="{Binding CanFix, Converter={StaticResource BoolToVisibilityConverter}}"
+                                IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
+                                Command="{Binding DataContext.FixCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                CommandParameter="{Binding}"/>
+                    </Grid>
+
+                    <Border Background="{StaticResource BgWindowBrush}" CornerRadius="6" Padding="10" Margin="0,10,0,0">
+                        <TextBlock Text="{Binding EvidenceText}" FontFamily="Consolas" FontSize="10.5"
+                                   Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap"/>
+                    </Border>
+
+                    <TextBlock Text="{Binding Recommendation}" Style="{StaticResource BodyText}" Margin="0,10,0,0"/>
+
+                    <TextBlock Text="{Binding StatusMessage}" FontSize="11" Margin="0,8,0,0" TextWrapping="Wrap"
+                               Visibility="{Binding StatusMessage, Converter={StaticResource NullToVisibilityConverter}}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="{StaticResource RiskyBrush}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsFixed}" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource SafeBrush}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="32,28,32,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                <TextBlock Text="Estabilidad" Style="{StaticResource TitleText}"/>
+                <TextBlock Text="Busca la causa de pantallazos azules, cuelgues y reinicios: visor de eventos, RAM, drivers, BIOS y ajustes que dejan la pantalla en negro."
+                           Style="{StaticResource BodyText}" Margin="0,6,0,0"/>
+                <TextBlock Text="{Binding Summary}" Foreground="{StaticResource AccentCyanBrush}" FontSize="12" FontWeight="SemiBold"
+                           Margin="0,10,0,0" Visibility="{Binding Summary, Converter={StaticResource NullToVisibilityConverter}}"/>
+            </StackPanel>
+            <Button Grid.Column="1" Content="Analizar" Style="{StaticResource PrimaryButton}" VerticalAlignment="Top"
+                    Command="{Binding AnalyzeCommand}"
+                    IsEnabled="{Binding IsAnalyzing, Converter={StaticResource InverseBoolConverter}}"/>
+        </Grid>
+
+        <TextBlock Grid.Row="1" Margin="32,0,32,28" Style="{StaticResource BodyText}"
+                   Text="Pulsa Analizar para revisar el equipo. El análisis solo lee información; nada cambia hasta que pulses Arreglar."
+                   Visibility="{Binding HasAnalyzed, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+
+        <ScrollViewer Grid.Row="1" Margin="32,0,32,28" VerticalScrollBarVisibility="Auto"
+                      Visibility="{Binding HasAnalyzed, Converter={StaticResource BoolToVisibilityConverter}}">
+            <ItemsControl ItemsSource="{Binding Findings}"/>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

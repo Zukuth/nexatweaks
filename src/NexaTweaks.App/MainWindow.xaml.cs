@@ -37,6 +37,19 @@ public partial class MainWindow : Window
         "Dashboard" => new DashboardView(new DashboardViewModel()),
         "Windows" => new TweakCategoryView(new TweakCategoryViewModel(
             "Windows", "Servicios, telemetría, efectos visuales y plan de energía.", TweakCatalog.Windows)),
+        "Presets" => new PresetsView(new PresetsViewModel()),
+        "Debloat" => new TweakCategoryView(new TweakCategoryViewModel(
+            "Debloatware", "Apps preinstaladas de la Tienda. Desinstalar es de ida: para recuperarlas hay que bajarlas de Microsoft Store.",
+            TweakCatalog.Debloat)),
+        "Privacy" => new TweakCategoryView(new TweakCategoryViewModel(
+            "Privacidad", "Telemetría, Copilot, Recall, widgets y permisos de las apps de la Tienda.", TweakCatalog.Privacy)),
+        "Services" => new TweakCategoryView(new TweakCategoryViewModel(
+            "Servicios", "Servicios de Windows que un PC doméstico no necesita. Windows Update y Defender nunca se tocan.", TweakCatalog.Services)),
+        "Interface" => new TweakCategoryView(new TweakCategoryViewModel(
+            "Interfaz", "Barra de tareas y Explorador a tu gusto. Algunos cambios piden reiniciar el Explorador.", TweakCatalog.Interface)),
+        "Browsers" => new TweakCategoryView(new TweakCategoryViewModel(
+            "Navegadores", "Políticas oficiales de Edge, Chrome y Brave: telemetría, sincronización y funciones de más. Las protecciones de seguridad no se tocan.",
+            TweakCatalog.Browsers)),
         "Network" => new NetworkView(new NetworkViewModel()),
         "Input" => new TweakCategoryView(new TweakCategoryViewModel(
             "Input", "Mouse y teclado sin aceleración, respuesta 1:1.", TweakCatalog.Input)),
@@ -47,6 +60,7 @@ public partial class MainWindow : Window
         "Apps" => new AppsView(new AppsViewModel()),
         "Autorun" => new AutorunView(new AutorunViewModel()),
         "Repair" => new RepairView(new RepairViewModel()),
+        "Stability" => new StabilityView(new StabilityViewModel()),
         "Backup" => new BackupView(new BackupViewModel()),
         "Advanced" => new TweakCategoryView(new TweakCategoryViewModel(
             "Avanzado", "Tweaks de mayor riesgo (Defender, Windows Update, UAC, Xbox). Desactivados por defecto y con confirmación extra.",

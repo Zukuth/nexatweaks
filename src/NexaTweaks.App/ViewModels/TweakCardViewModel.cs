@@ -25,6 +25,12 @@ public partial class TweakCardViewModel : ObservableObject
     [ObservableProperty]
     private bool isSelected;
 
+    /// <summary>False when the tweak doesn't apply to this machine (a service Windows removed, or
+    /// one of a program that isn't installed). Starts true so cards render immediately; the real
+    /// value arrives with the background state check.</summary>
+    [ObservableProperty]
+    private bool isAvailable = true;
+
     [ObservableProperty]
     private bool isBusy;
 

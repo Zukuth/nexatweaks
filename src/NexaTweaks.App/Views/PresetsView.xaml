@@ -1,0 +1,240 @@
+<UserControl x:Class="NexaTweaks.App.Views.PresetsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:NexaTweaks.App.ViewModels">
+    <UserControl.Resources>
+        <!-- Un color por nivel: verde conservador, azul intermedio, rojo agresivo. -->
+        <SolidColorBrush x:Key="SafeTintBrush" Color="#16281D"/>
+        <SolidColorBrush x:Key="SafeTintHoverBrush" Color="#1B3324"/>
+        <SolidColorBrush x:Key="MediumTintBrush" Color="#0F2130"/>
+        <SolidColorBrush x:Key="MediumTintHoverBrush" Color="#142B3E"/>
+        <SolidColorBrush x:Key="ExtremeTintBrush" Color="#2A161B"/>
+        <SolidColorBrush x:Key="ExtremeTintHoverBrush" Color="#371C22"/>
+
+        <DataTemplate x:Key="PresetCardTemplate" DataType="{x:Type vm:PresetCardViewModel}">
+            <Button Command="{Binding DataContext.SelectCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    CommandParameter="{Binding}" HorizontalContentAlignment="Stretch" Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Card" Background="{StaticResource BgCardBrush}" CornerRadius="12" Padding="18"
+                                BorderBrush="{StaticResource BorderBrush2}" BorderThickness="1.5" Margin="0,0,12,0">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Tone}" Value="Safe">
+                                <Setter TargetName="Card" Property="Background" Value="{StaticResource SafeTintBrush}"/>
+                                <Setter TargetName="Card" Property="BorderBrush" Value="#27472F"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Tone}" Value="Medium">
+                                <Setter TargetName="Card" Property="Background" Value="{StaticResource MediumTintBrush}"/>
+                                <Setter TargetName="Card" Property="BorderBrush" Value="#1D4560"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Tone}" Value="Extreme">
+                                <Setter TargetName="Card" Property="Background" Value="{StaticResource ExtremeTintBrush}"/>
+                                <Setter TargetName="Card" Property="BorderBrush" Value="#5A2731"/>
+                            </DataTrigger>
+
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Tone}" Value="Safe"/>
+                                    <Condition Binding="{Binding IsSelected}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter TargetName="Card" Property="Background" Value="{StaticResource SafeTintHoverBrush}"/>
+                                <Setter TargetName="Card" Property="BorderBrush" Value="{StaticResource SafeBrush}"/>
+                                <Setter TargetName="Card" Property="BorderThickness" Value="2"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Tone}" Value="Medium"/>
+                                    <Condition Binding="{Binding IsSelected}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter TargetName="Card" Property="Background" Value="{StaticResource MediumTintHoverBrush}"/>
+                                <Setter TargetName="Card" Property="BorderBrush" Value="{StaticResource AccentCyanBrush}"/>
+                                <Setter TargetName="Card" Property="BorderThickness" Value="2"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Tone}" Value="Extreme"/>
+                                    <Condition Binding="{Binding IsSelected}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter TargetName="Card" Property="Background" Value="{StaticResource ExtremeTintHoverBrush}"/>
+                                <Setter TargetName="Card" Property="BorderBrush" Value="{StaticResource RiskyBrush}"/>
+                                <Setter TargetName="Card" Property="BorderThickness" Value="2"/>
+                            </MultiDataTrigger>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Card" Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="30" Height="30" CornerRadius="9" VerticalAlignment="Center" Margin="0,0,10,0">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="{StaticResource BgWindowBrush}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Tone}" Value="Safe">
+                                            <Setter Property="Background" Value="#1E3B29"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Tone}" Value="Medium">
+                                            <Setter Property="Background" Value="#17354A"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Tone}" Value="Extreme">
+                                            <Setter Property="Background" Value="#43202A"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14" FontWeight="Bold">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Text" Value="⚡"/>
+                                        <Setter Property="Foreground" Value="{StaticResource RiskyBrush}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Tone}" Value="Safe">
+                                                <Setter Property="Text" Value="🛡"/>
+                                                <Setter Property="Foreground" Value="{StaticResource SafeBrush}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Tone}" Value="Medium">
+                                                <Setter Property="Text" Value="◉"/>
+                                                <Setter Property="Foreground" Value="{StaticResource AccentCyanBrush}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Name}" FontSize="15.5" FontWeight="Bold">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{StaticResource RiskyBrush}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Tone}" Value="Safe">
+                                                <Setter Property="Foreground" Value="{StaticResource SafeBrush}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Tone}" Value="Medium">
+                                                <Setter Property="Foreground" Value="{StaticResource AccentCyanBrush}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBlock Text="{Binding CountText}" Style="{StaticResource CaptionText}"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock Text="{Binding Description}" Style="{StaticResource BodyText}" TextWrapping="Wrap" FontSize="11.5" Margin="0,12,0,0"/>
+                </StackPanel>
+            </Button>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="32,28,32,18">
+            <TextBlock Text="Presets" Style="{StaticResource TitleText}"/>
+            <TextBlock Text="Tandas de ajustes listas para aplicar de una vez. Cada nivel incluye el anterior y todo queda guardado en Backup."
+                       Style="{StaticResource BodyText}" Margin="0,6,0,18"/>
+            <ItemsControl ItemsSource="{Binding Presets}" ItemTemplate="{StaticResource PresetCardTemplate}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="1"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" Margin="32,0,32,24" VerticalScrollBarVisibility="Auto">
+            <Border Style="{StaticResource CardBorder}" DataContext="{Binding Selected}">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Width="4" Height="16" CornerRadius="2" Margin="0,0,10,0" VerticalAlignment="Center">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="{StaticResource RiskyBrush}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Tone}" Value="Safe">
+                                                    <Setter Property="Background" Value="{StaticResource SafeBrush}"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Tone}" Value="Medium">
+                                                    <Setter Property="Background" Value="{StaticResource AccentCyanBrush}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                </Border>
+                                <TextBlock Style="{StaticResource SectionHeaderText}" VerticalAlignment="Center">
+                                    <Run Text="Ajustes de "/>
+                                    <Run Text="{Binding Name, Mode=OneWay}"/>
+                                </TextBlock>
+                                <!-- Total siempre a la vista, también aquí. -->
+                                <Border Background="{StaticResource BgWindowBrush}" CornerRadius="8" Padding="9,2" Margin="10,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding CountText}" FontSize="10.5" FontWeight="Bold"
+                                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                                </Border>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Description}" Style="{StaticResource BodyText}" TextWrapping="Wrap" Margin="14,6,16,0"/>
+                        </StackPanel>
+                        <Button Grid.Column="1" Content="Aplicar preset" Style="{StaticResource PrimaryButton}" VerticalAlignment="Center"
+                                Command="{Binding DataContext.ApplyCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                IsEnabled="{Binding DataContext.IsBusy, RelativeSource={RelativeSource AncestorType=UserControl},
+                                                    Converter={StaticResource InverseBoolConverter}}"/>
+                    </Grid>
+
+                    <TextBlock Text="EN QUÉ SE CONCENTRA" Style="{StaticResource CaptionText}" FontWeight="Bold" Margin="0,20,0,8"/>
+                    <ItemsControl ItemsSource="{Binding Categories}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate><UniformGrid Columns="4"/></ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:PresetCategoryRow}">
+                                <StackPanel Margin="0,0,16,10">
+                                    <TextBlock Style="{StaticResource CaptionText}">
+                                        <Run Text="{Binding Category, Mode=OneWay}"/>
+                                        <Run Text="  "/>
+                                        <Run Text="{Binding Count, Mode=OneWay}" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold"/>
+                                    </TextBlock>
+                                    <ProgressBar Height="5" BorderThickness="0" Margin="0,4,0,0" Maximum="60"
+                                                 Background="{StaticResource BgWindowBrush}" Foreground="{StaticResource AccentCyanBrush}"
+                                                 Value="{Binding Count, Mode=OneWay}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <TextBlock Text="SE APLICARÁN" Style="{StaticResource CaptionText}" FontWeight="Bold" Margin="0,14,0,8"/>
+                    <ItemsControl ItemsSource="{Binding Highlights}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{StaticResource BgWindowBrush}" CornerRadius="7" Padding="9,4" Margin="0,0,8,8">
+                                    <TextBlock Text="{Binding}" FontSize="10.5" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock Text="… y el resto hasta completar el preset." Style="{StaticResource CaptionText}" FontStyle="Italic"/>
+
+                    <TextBlock Text="{Binding DataContext.StatusMessage, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                               Style="{StaticResource BodyText}" Foreground="{StaticResource SafeBrush}" Margin="0,14,0,0" TextWrapping="Wrap"
+                               Visibility="{Binding DataContext.StatusMessage, RelativeSource={RelativeSource AncestorType=UserControl},
+                                                    Converter={StaticResource NullToVisibilityConverter}}"/>
+                </StackPanel>
+            </Border>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

@@ -81,5 +81,82 @@ public static partial class TweakCatalog
                 return $"powershell -NoProfile -Command \"Enable-NetAdapterPowerManagement -Name {nameList} -ErrorAction SilentlyContinue\"";
             },
         },
+
+        new RegistryTweak
+        {
+            Id = "net.tcp.pmtu",
+            Name = "Detección automática de MTU",
+            Description = "Deja que Windows calcule el tamaño de paquete óptimo por ruta en vez de usar 576 bytes fijos.",
+            Category = TweakCategory.Network,
+            Risk = RiskLevel.Safe,
+            DefaultEnabled = true,
+            RequiresRestart = true,
+            Hive = RegistryHive.LocalMachine,
+            SubKey = @"SYSTEM\CurrentControlSet\Services\Tcpip\Parameters",
+            ValueName = "EnablePMTUDiscovery",
+            EnabledValue = 1,
+        },
+        new RegistryTweak
+        {
+            Id = "net.tcp.retransmissions",
+            Name = "Reintentos TCP más cortos",
+            Description = "Baja a 5 los reintentos antes de dar una conexión por perdida, para que los cortes se noten menos.",
+            Category = TweakCategory.Network,
+            Risk = RiskLevel.Advanced,
+            DefaultEnabled = false,
+            RequiresRestart = true,
+            Hive = RegistryHive.LocalMachine,
+            SubKey = @"SYSTEM\CurrentControlSet\Services\Tcpip\Parameters",
+            ValueName = "TcpMaxDataRetransmissions",
+            EnabledValue = 5,
+        },
+        new RegistryTweak
+        {
+            Id = "net.dnspriority",
+            Name = "Priorizar respuestas DNS",
+            Description = "Windows consulta antes el DNS que otros métodos de resolución más lentos (NetBIOS).",
+            Category = TweakCategory.Network,
+            Risk = RiskLevel.Safe,
+            DefaultEnabled = false,
+            RequiresRestart = true,
+            Hive = RegistryHive.LocalMachine,
+            SubKey = @"SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider",
+            ValueName = "DnsPriority",
+            EnabledValue = 6,
+        },
+        new RegistryTweak
+        {
+            Id = "net.localpriority",
+            Name = "Priorizar la caché y el archivo hosts",
+            Description = "Resuelve primero con lo que ya está en el equipo antes de salir a la red.",
+            Category = TweakCategory.Network,
+            Risk = RiskLevel.Safe,
+            DefaultEnabled = false,
+            RequiresRestart = true,
+            Hive = RegistryHive.LocalMachine,
+            SubKey = @"SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider",
+            ValueName = "LocalPriority",
+            EnabledValue = 4,
+        },
+        new ShellCommandTweak
+        {
+            Id = "net.teredo",
+            Name = "Desactivar Teredo",
+            Description = "Apaga el túnel IPv6 sobre IPv4 que Windows usa para algunas conexiones P2P. Suele sobrar y añade latencia.",
+            Category = TweakCategory.Network,
+            Risk = RiskLevel.Advanced,
+            DefaultEnabled = false,
+            CaptureState = () =>
+            {
+                var output = ShellCommandTweak.ExecCapture("netsh interface teredo show state");
+                return output.Contains("disabled", StringComparison.OrdinalIgnoreCase) ? "disabled" : "default";
+            },
+            ApplyCommand = () => "netsh interface teredo set state disabled",
+            RevertCommand = prior => prior == "disabled"
+                ? "netsh interface teredo set state disabled"
+                : "netsh interface teredo set state default",
+            AppliedCheck = () => ShellCommandTweak.ExecCapture("netsh interface teredo show state")
+                .Contains("disabled", StringComparison.OrdinalIgnoreCase),
+        },
     };
 }

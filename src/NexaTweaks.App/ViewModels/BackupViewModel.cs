@@ -5,6 +5,8 @@ using CommunityToolkit.Mvvm.Input;
 using NexaTweaks.App.Services;
 using NexaTweaks.Core.Backup;
 using NexaTweaks.Core.Catalog;
+using NexaTweaks.Core.Diagnostics;
+using NexaTweaks.Core.Stability;
 using NexaTweaks.Core.Tweaks;
 
 namespace NexaTweaks.App.ViewModels;
@@ -53,6 +55,8 @@ public partial class BackupViewModel : ObservableObject
         StatusMessage = ok
             ? "Punto de restauración de Windows creado correctamente."
             : $"No se pudo crear el punto de restauración: {error}";
+        if (ok) ActivityLog.Instance.Ok("Punto de restauración de Windows creado.");
+        else ActivityLog.Instance.Fail($"No se pudo crear el punto de restauración: {error}");
     }
 
     [RelayCommand]
@@ -61,6 +65,7 @@ public partial class BackupViewModel : ObservableObject
         card.IsBusy = true;
 
         using var busy = BusyService.Instance.Begin($"Restaurando \"{card.Label}\"...");
+        ActivityLog.Instance.Info($"Restaurando backup «{card.Label}»...");
 
         var results = await Task.Run(() =>
         {
@@ -72,6 +77,8 @@ public partial class BackupViewModel : ObservableObject
         card.StatusMessage = failed == 0
             ? "Restaurado correctamente."
             : $"{failed} elemento(s) no se pudieron restaurar (puede que ya no existan).";
+        if (failed == 0) ActivityLog.Instance.Ok($"Backup restaurado: «{card.Label}» ({results.Count} elemento(s)).");
+        else ActivityLog.Instance.Warn($"Backup «{card.Label}»: {failed} de {results.Count} no se pudieron restaurar.");
         card.IsBusy = false;
 
         await ReloadAsync();
@@ -79,12 +86,8 @@ public partial class BackupViewModel : ObservableObject
 
     private static Dictionary<string, ITweak> BuildTweaksById()
     {
-        var all = TweakCatalog.Windows
-            .Concat(TweakCatalog.Network)
-            .Concat(TweakCatalog.Input)
-            .Concat(TweakCatalog.Gpu)
-            .Concat(TweakCatalog.Cleanup)
-            .Concat(TweakCatalog.Advanced)
+        var all = TweakCatalog.All
+            .Concat(StabilityFixes.All)
             .Concat(StartupItemDiscovery.Discover());
 
         var dict = new Dictionary<string, ITweak>();

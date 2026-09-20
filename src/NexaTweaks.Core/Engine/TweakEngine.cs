@@ -131,6 +131,7 @@ public sealed class TweakEngine
         public bool DefaultEnabled => false;
         public bool IsReversible => false;
         public bool RequiresRestart => false;
+        public bool IsAvailable() => false;
         public bool IsApplied() => false;
         public BackupEntry Apply() => throw new NotSupportedException();
         public void Revert(BackupEntry entry) { }

@@ -17,6 +17,11 @@ public interface ITweak
     /// <summary>Whether this tweak only fully takes effect after Windows restarts.</summary>
     bool RequiresRestart { get; }
 
+    /// <summary>Whether this tweak applies to this machine at all. A service Windows removed, or
+    /// one that belongs to software that isn't installed, can't be applied: the UI shows it as
+    /// unavailable instead of letting the user click and hit an error.</summary>
+    bool IsAvailable();
+
     bool IsApplied();
 
     /// <summary>Captures prior state, applies the tweak, and returns a backup entry describing how to revert it.</summary>

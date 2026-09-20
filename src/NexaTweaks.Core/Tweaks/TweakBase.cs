@@ -13,6 +13,8 @@ public abstract class TweakBase : ITweak
     public virtual bool IsReversible { get; init; } = true;
     public bool RequiresRestart { get; init; }
 
+    public virtual bool IsAvailable() => true;
+
     public abstract bool IsApplied();
     public abstract BackupEntry Apply();
     public abstract void Revert(BackupEntry entry);

@@ -13,7 +13,17 @@
     </ResourceDictionary.MergedDictionaries>
 
     <DataTemplate x:Key="TweakCardTemplate" DataType="{x:Type vm:TweakCardViewModel}">
-        <Border Style="{StaticResource CardBorder}" Margin="0,0,0,10">
+        <Border Margin="0,0,0,10">
+            <Border.Style>
+                <Style TargetType="Border" BasedOn="{StaticResource CardBorder}">
+                    <Style.Triggers>
+                        <!-- Lo que este equipo no tiene se ve apagado y no se puede activar. -->
+                        <DataTrigger Binding="{Binding IsAvailable}" Value="False">
+                            <Setter Property="Opacity" Value="0.45"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -41,6 +51,11 @@
                         </Border>
                         <TextBlock Text="no reversible" Style="{StaticResource CaptionText}" Margin="10,0,0,0" VerticalAlignment="Center"
                                    Visibility="{Binding IsReversible, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                        <Border CornerRadius="8" Padding="7,2" Margin="10,0,0,0" VerticalAlignment="Center"
+                                Background="{StaticResource BgWindowBrush}"
+                                Visibility="{Binding IsAvailable, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                            <TextBlock Text="no disponible" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}"/>
+                        </Border>
                     </StackPanel>
                     <TextBlock Text="{Binding Description}" Style="{StaticResource BodyText}" Margin="0,6,0,0"/>
                     <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource RiskyBrush}" FontSize="11" Margin="0,6,0,0"
@@ -52,7 +67,8 @@
                     <TextBlock Text="pendiente" Style="{StaticResource CaptionText}"
                                Visibility="{Binding IsPending, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </StackPanel>
-                <CheckBox Grid.Column="2" Style="{StaticResource ToggleSwitch}" IsChecked="{Binding IsSelected}" VerticalAlignment="Center"/>
+                <CheckBox Grid.Column="2" Style="{StaticResource ToggleSwitch}" IsChecked="{Binding IsSelected}" VerticalAlignment="Center"
+                          IsEnabled="{Binding IsAvailable}"/>
             </Grid>
         </Border>
     </DataTemplate>

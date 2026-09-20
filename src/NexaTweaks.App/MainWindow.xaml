@@ -46,6 +46,42 @@
                             <TextBlock Text="Windows"/>
                         </StackPanel>
                     </RadioButton>
+                    <RadioButton x:Name="NavPresets" Style="{StaticResource NavItemButton}" Checked="Nav_Checked" Tag="Presets">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="6" Height="6" Fill="{StaticResource AccentCyanBrush}" Margin="0,0,10,0"/>
+                            <TextBlock Text="Presets"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavDebloat" Style="{StaticResource NavItemButton}" Checked="Nav_Checked" Tag="Debloat">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="6" Height="6" Fill="{StaticResource AdvancedBrush}" Margin="0,0,10,0"/>
+                            <TextBlock Text="Debloatware"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavPrivacy" Style="{StaticResource NavItemButton}" Checked="Nav_Checked" Tag="Privacy">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="6" Height="6" Fill="{StaticResource AccentCyanBrush}" Margin="0,0,10,0"/>
+                            <TextBlock Text="Privacidad"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavServices" Style="{StaticResource NavItemButton}" Checked="Nav_Checked" Tag="Services">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="6" Height="6" Fill="{StaticResource AdvancedBrush}" Margin="0,0,10,0"/>
+                            <TextBlock Text="Servicios"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavInterface" Style="{StaticResource NavItemButton}" Checked="Nav_Checked" Tag="Interface">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="6" Height="6" Fill="{StaticResource SafeBrush}" Margin="0,0,10,0"/>
+                            <TextBlock Text="Interfaz"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavBrowsers" Style="{StaticResource NavItemButton}" Checked="Nav_Checked" Tag="Browsers">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="6" Height="6" Fill="{StaticResource AccentCyanBrush}" Margin="0,0,10,0"/>
+                            <TextBlock Text="Navegadores"/>
+                        </StackPanel>
+                    </RadioButton>
                     <RadioButton x:Name="NavNetwork" Style="{StaticResource NavItemButton}" Checked="Nav_Checked" Tag="Network">
                         <StackPanel Orientation="Horizontal">
                             <Ellipse Width="6" Height="6" Fill="{StaticResource AccentCyanBrush}" Margin="0,0,10,0"/>
@@ -94,6 +130,12 @@
                             <TextBlock Text="Reparación"/>
                         </StackPanel>
                     </RadioButton>
+                    <RadioButton x:Name="NavStability" Style="{StaticResource NavItemButton}" Checked="Nav_Checked" Tag="Stability">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="6" Height="6" Fill="{StaticResource RiskyBrush}" Margin="0,0,10,0"/>
+                            <TextBlock Text="Estabilidad"/>
+                        </StackPanel>
+                    </RadioButton>
                     <RadioButton x:Name="NavBackup" Style="{StaticResource NavItemButton}" Checked="Nav_Checked" Tag="Backup">
                         <StackPanel Orientation="Horizontal">
                             <Ellipse Width="6" Height="6" Fill="{StaticResource AccentVioletBrush}" Margin="0,0,10,0"/>
@@ -124,7 +166,14 @@
             </DockPanel>
         </Border>
 
-        <ContentControl x:Name="ContentHost" Grid.Column="1"/>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ContentControl x:Name="ContentHost" Grid.Row="0"/>
+            <views:ActivityLogPanel Grid.Row="1"/>
+        </Grid>
 
         <views:BusyOverlay Grid.Column="0" Grid.ColumnSpan="2"/>
         </Grid>
