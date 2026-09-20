@@ -11,6 +11,9 @@ Centraliza en una sola app tweaks de sistema, limpieza, monitoreo, gestión de a
 
 - **Dashboard** — estado general del equipo de un vistazo.
 - **Windows (Tweaks)** — catálogo de ajustes del sistema (registro, servicios, tareas programadas, planes de energía, Nagle, comandos), aplicables y reversibles.
+- **Privacidad** — telemetría, Copilot, Recall, widgets, contenido sugerido y permisos de las apps de la Tienda (23 ajustes).
+- **Servicios** — servicios de Windows que un PC doméstico no necesita, con su modo de inicio anterior guardado (27 ajustes). Windows Update, Defender, el firewall y el registro de eventos quedan fuera a propósito, y hay una prueba que lo impide.
+- **Interfaz** — barra de tareas y Explorador (alineación, extensiones, archivos ocultos, Vista de tareas, Chat).
 - **Network** — benchmark de servidores DNS y utilidades de ping/latencia.
 - **Input / Gpu** — monitoreo de uso de GPU y estadísticas del sistema en tiempo real, incluida temperatura de CPU.
 - **Cleanup** — limpieza de archivos temporales y caché de navegadores, analizador de espacio en disco, escáner de registro y listado de apps instaladas.
@@ -19,6 +22,7 @@ Centraliza en una sola app tweaks de sistema, limpieza, monitoreo, gestión de a
 - **Repair** — catálogo de acciones de reparación rápida del sistema.
 - **Estabilidad** — analiza visor de eventos, registro y WMI para explicar pantallazos azules, cuelgues y reinicios (códigos de parada, TPM, WHEA, apps que se cierran, RAM mezclada, TdrDelay, políticas de Windows Update, drivers/BIOS antiguos, Windows modificado) y ofrece arreglos reversibles cuando son seguros.
 - **Backup** — snapshots antes/después de cada tanda de cambios y gestión de puntos de restauración de Windows.
+- **Registro** — panel inferior fijo con lo que va haciendo la app (aplicar, revertir, reparar, analizar), con copiar y limpiar, y casilla de punto de restauración que se crea antes del primer cambio de cada sesión.
 - **Advanced / Settings** — exportación de reportes de soporte (logs, info del sistema) y preferencias de la app.
 
 ## Arquitectura
