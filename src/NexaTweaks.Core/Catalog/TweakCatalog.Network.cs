@@ -138,5 +138,25 @@ public static partial class TweakCatalog
             ValueName = "LocalPriority",
             EnabledValue = 4,
         },
+        new ShellCommandTweak
+        {
+            Id = "net.teredo",
+            Name = "Desactivar Teredo",
+            Description = "Apaga el túnel IPv6 sobre IPv4 que Windows usa para algunas conexiones P2P. Suele sobrar y añade latencia.",
+            Category = TweakCategory.Network,
+            Risk = RiskLevel.Advanced,
+            DefaultEnabled = false,
+            CaptureState = () =>
+            {
+                var output = ShellCommandTweak.ExecCapture("netsh interface teredo show state");
+                return output.Contains("disabled", StringComparison.OrdinalIgnoreCase) ? "disabled" : "default";
+            },
+            ApplyCommand = () => "netsh interface teredo set state disabled",
+            RevertCommand = prior => prior == "disabled"
+                ? "netsh interface teredo set state disabled"
+                : "netsh interface teredo set state default",
+            AppliedCheck = () => ShellCommandTweak.ExecCapture("netsh interface teredo show state")
+                .Contains("disabled", StringComparison.OrdinalIgnoreCase),
+        },
     };
 }

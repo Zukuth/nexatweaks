@@ -21,6 +21,7 @@ public static partial class TweakCatalog
         .Concat(Services)
         .Concat(Privacy)
         .Concat(Interface)
+        .Concat(Browsers)
         .Concat(Network)
         .Concat(Input)
         .Concat(Gpu)

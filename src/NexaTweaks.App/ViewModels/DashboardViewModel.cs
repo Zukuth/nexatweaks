@@ -166,6 +166,8 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
         TweakCategory.Services => "Servicios",
         TweakCategory.Privacy => "Privacidad",
         TweakCategory.Interface => "Interfaz",
+        TweakCategory.Browsers => "Navegadores",
+        TweakCategory.Debloat => "Debloatware",
         _ => category.ToString(),
     };
 

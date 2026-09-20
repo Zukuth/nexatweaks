@@ -55,6 +55,7 @@ public partial class PresetCardViewModel : ObservableObject
         TweakCategory.Services => "Servicios",
         TweakCategory.Privacy => "Privacidad",
         TweakCategory.Interface => "Interfaz",
+        TweakCategory.Browsers => "Navegadores",
         _ => category.ToString(),
     };
 }

@@ -42,7 +42,7 @@ public static class PresetCatalog
 
     /// <summary>Tweaks a preset is allowed to touch at all.</summary>
     private static IEnumerable<ITweak> Eligible() => TweakCatalog.All
-        .Where(t => t.Category is not (TweakCategory.Advanced or TweakCategory.Debloat))
+        .Where(t => t.Category is not (TweakCategory.Advanced or TweakCategory.Debloat or TweakCategory.Browsers))
         .Where(t => t.IsReversible)
         .Where(t => !NeverInPresets.Contains(t.Id));
 }

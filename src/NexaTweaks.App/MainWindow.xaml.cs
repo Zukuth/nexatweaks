@@ -47,6 +47,9 @@ public partial class MainWindow : Window
             "Servicios", "Servicios de Windows que un PC doméstico no necesita. Windows Update y Defender nunca se tocan.", TweakCatalog.Services)),
         "Interface" => new TweakCategoryView(new TweakCategoryViewModel(
             "Interfaz", "Barra de tareas y Explorador a tu gusto. Algunos cambios piden reiniciar el Explorador.", TweakCatalog.Interface)),
+        "Browsers" => new TweakCategoryView(new TweakCategoryViewModel(
+            "Navegadores", "Políticas oficiales de Edge, Chrome y Brave: telemetría, sincronización y funciones de más. Las protecciones de seguridad no se tocan.",
+            TweakCatalog.Browsers)),
         "Network" => new NetworkView(new NetworkViewModel()),
         "Input" => new TweakCategoryView(new TweakCategoryViewModel(
             "Input", "Mouse y teclado sin aceleración, respuesta 1:1.", TweakCatalog.Input)),

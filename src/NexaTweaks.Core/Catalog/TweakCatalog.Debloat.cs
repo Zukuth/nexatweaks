@@ -95,7 +95,94 @@ public static partial class TweakCatalog
 
         App("app.zunemusic", "Microsoft.ZuneMusic", "Groove Música",
             "Reproductor de música heredado."),
+
+        App("app.cortana", "Microsoft.549981C3F5F10", "Cortana",
+            "El asistente de voz de Windows, ya retirado de la barra de tareas."),
+
+        App("app.bingfinance", "Microsoft.BingFinance", "Finanzas",
+            "App de bolsa y finanzas de Bing."),
+
+        App("app.bingsports", "Microsoft.BingSports", "Deportes",
+            "App de resultados deportivos de Bing."),
+
+        App("app.bingtranslator", "Microsoft.BingTranslator", "Traductor",
+            "Traductor de Microsoft en versión de la Tienda."),
+
+        App("app.officehub", "Microsoft.MicrosoftOfficeHub", "Office (acceso)",
+            "Acceso directo a Office online. No es Office instalado: no se desinstala nada real."),
+
+        App("app.teams", "MSTeams", "Microsoft Teams",
+            "Teams personal preinstalado en Windows 11."),
+
+        App("app.devhome", "Microsoft.Windows.DevHome", "Dev Home",
+            "Panel para desarrolladores que Windows 11 instala de fábrica."),
+
+        App("app.outlooknew", "Microsoft.OutlookForWindows", "Outlook (nuevo)",
+            "El nuevo Outlook basado en web que Microsoft preinstala."),
+
+        App("app.copilot", "Microsoft.Copilot", "Copilot",
+            "La app del asistente de IA. Complementa al ajuste que lo quita de la barra."),
+
+        App("app.journal", "Microsoft.MicrosoftJournal", "Journal",
+            "App de notas a mano para pantallas táctiles."),
+
+        App("app.whiteboard", "Microsoft.Whiteboard", "Whiteboard",
+            "Pizarra colaborativa de Microsoft."),
+
+        App("app.powerautomate", "Microsoft.PowerAutomateDesktop", "Power Automate",
+            "Automatización de tareas de escritorio, preinstalada en Windows 11."),
+
+        App("app.print3d", "Microsoft.Print3D", "Print 3D",
+            "App de impresión 3D discontinuada."),
+
+        App("app.speedtest", "Microsoft.NetworkSpeedTest", "Network Speed Test",
+            "Medidor de velocidad de red de Microsoft."),
+
+        App("app.remotedesktop", "Microsoft.RemoteDesktop", "Escritorio remoto (Tienda)",
+            "Cliente de escritorio remoto de la Tienda. El de Windows (mstsc) no se toca."),
+
+        App("app.readinglist", "Microsoft.WindowsReadingList", "Lista de lectura",
+            "App de lista de lectura heredada."),
+
+        App("app.messaging", "Microsoft.Messaging", "Mensajes",
+            "App de SMS heredada de Windows."),
+
+        App("app.oneconnect", "Microsoft.OneConnect", "Wi-Fi de pago",
+            "App para planes de datos móviles y Wi-Fi de pago."),
+
+        App("app.wallet", "Microsoft.Wallet", "Cartera",
+            "Cartera de pagos de Microsoft, descontinuada."),
+
+        App("app.powerbi", "Microsoft.MicrosoftPowerBIForWindows", "Power BI",
+            "Visor de informes de Power BI."),
+
+        // OneDrive no es una app de la Tienda: se quita con su propio desinstalador.
+        new ShellCommandTweak
+        {
+            Id = "app.onedrive",
+            Name = "Desinstalar OneDrive",
+            Description = "Quita OneDrive del equipo. Tus archivos ya sincronizados se quedan en la carpeta local; los de la nube siguen en onedrive.com.",
+            Category = TweakCategory.Debloat,
+            Risk = RiskLevel.Advanced,
+            DefaultEnabled = false,
+            IsReversible = false,
+            CaptureState = () => OneDriveSetup() is null ? "ausente" : "instalado",
+            ApplyCommand = () => $"taskkill /f /im OneDrive.exe & \"{OneDriveSetup()}\" /uninstall",
+            RevertCommand = _ => "cmd /c exit 0",
+            AppliedCheck = () => OneDriveSetup() is null,
+        },
     };
+
+    /// <summary>Ruta del desinstalador de OneDrive, que cambia entre equipos de 64 y 32 bits.</summary>
+    private static string? OneDriveSetup()
+    {
+        var candidates = new[]
+        {
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "SysWOW64", "OneDriveSetup.exe"),
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "OneDriveSetup.exe"),
+        };
+        return candidates.FirstOrDefault(File.Exists);
+    }
 
     private static AppxPackageTweak App(string id, string packageName, string name, string description) => new()
     {

@@ -12,7 +12,8 @@ public enum TweakCategory
     Services,
     Privacy,
     Interface,
-    Debloat
+    Debloat,
+    Browsers
 }
 
 public enum RiskLevel

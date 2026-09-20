@@ -409,6 +409,73 @@ public static partial class TweakCatalog
             ValueName = "Win32PrioritySeparation",
             EnabledValue = 38,
         },
+        new RegistryTweak
+        {
+            Id = "win.ntfs.lastaccess",
+            Name = "No registrar el último acceso a archivos",
+            Description = "NTFS deja de escribir la fecha de último acceso cada vez que se abre un archivo. Se nota con muchos archivos pequeños.",
+            Category = TweakCategory.Windows,
+            Risk = RiskLevel.Safe,
+            DefaultEnabled = true,
+            Hive = RegistryHive.LocalMachine,
+            SubKey = @"SYSTEM\CurrentControlSet\Control\FileSystem",
+            ValueName = "NtfsDisableLastAccessUpdate",
+            EnabledValue = 1,
+        },
+        new RegistryTweak
+        {
+            Id = "win.longpaths",
+            Name = "Permitir rutas largas",
+            Description = "Quita el límite de 260 caracteres en las rutas de archivo, que rompe carpetas anidadas de proyectos.",
+            Category = TweakCategory.Windows,
+            Risk = RiskLevel.Safe,
+            DefaultEnabled = true,
+            RequiresRestart = true,
+            Hive = RegistryHive.LocalMachine,
+            SubKey = @"SYSTEM\CurrentControlSet\Control\FileSystem",
+            ValueName = "LongPathsEnabled",
+            EnabledValue = 1,
+        },
+        new RegistryTweak
+        {
+            Id = "win.modernstandby",
+            Name = "Desactivar Modern Standby",
+            Description = "Vuelve a la suspensión clásica (S3). Úsalo si el portátil se calienta o gasta batería con la tapa cerrada.",
+            Category = TweakCategory.Windows,
+            Risk = RiskLevel.Advanced,
+            RequiresRestart = true,
+            Hive = RegistryHive.LocalMachine,
+            SubKey = @"SYSTEM\CurrentControlSet\Control\Power",
+            ValueName = "PlatformAoAcOverride",
+            EnabledValue = 0,
+        },
+        new RegistryTweak
+        {
+            Id = "win.utctime",
+            Name = "Reloj del BIOS en UTC",
+            Description = "Necesario si arrancas también Linux: evita que la hora se descuadre cada vez que cambias de sistema.",
+            Category = TweakCategory.Windows,
+            Risk = RiskLevel.Advanced,
+            RequiresRestart = true,
+            Hive = RegistryHive.LocalMachine,
+            SubKey = @"SYSTEM\CurrentControlSet\Control\TimeZoneInformation",
+            ValueName = "RealTimeIsUniversal",
+            EnabledValue = 1,
+        },
+        new ShellCommandTweak
+        {
+            Id = "win.reservedstorage",
+            Name = "Quitar el almacenamiento reservado",
+            Description = "Libera los ~7 GB que Windows aparta para sus actualizaciones. Si el disco se llena, las actualizaciones pueden fallar.",
+            Category = TweakCategory.Windows,
+            Risk = RiskLevel.Advanced,
+            DefaultEnabled = false,
+            CaptureState = () => ShellCommandTweak.ExecCapture("dism /Online /Get-ReservedStorageState").Trim(),
+            ApplyCommand = () => "dism /Online /Set-ReservedStorageState /State:Disabled",
+            RevertCommand = _ => "dism /Online /Set-ReservedStorageState /State:Enabled",
+            AppliedCheck = () => ShellCommandTweak.ExecCapture("dism /Online /Get-ReservedStorageState")
+                .Contains("disabled", StringComparison.OrdinalIgnoreCase),
+        },
     };
 
     private static string? ExtractGuid(string powercfgOutput)

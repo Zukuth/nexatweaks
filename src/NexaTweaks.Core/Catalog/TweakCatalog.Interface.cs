@@ -45,6 +45,87 @@ public static partial class TweakCatalog
             "Quita el retardo de 400 ms con el que se despliegan los menús.",
             @"Control Panel\Desktop", "MenuShowDelay", "0", RegistryValueKind.String),
 
+        Ui("ui.snapflyout", "Quitar sugerencias al acoplar ventanas",
+            "Al arrastrar una ventana a un borde, Windows deja de proponerte con qué emparejarla.",
+            ExplorerAdvanced, "EnableSnapAssistFlyout", 0),
+
+        Ui("ui.startmenurecs", "Quitar recomendados del menú Inicio",
+            "Deja de sugerirte archivos y apps recién usados en el menú Inicio.",
+            ExplorerAdvanced, "Start_IrisRecommendations", 0),
+
+        Ui("ui.iconsonly", "Iconos en vez de miniaturas",
+            "Muestra el icono del tipo de archivo en lugar de generar una vista previa. Abre antes las carpetas con muchas fotos o vídeos.",
+            ExplorerAdvanced, "IconsOnly", 1),
+
+        Ui("ui.endtask", "«Finalizar tarea» en la barra de tareas",
+            "Añade la opción de cerrar a la fuerza un programa colgado con el botón derecho en su icono de la barra.",
+            @"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings",
+            "TaskbarEndTask", 1, defaultEnabled: true),
+
+        Ui("ui.darkmode.apps", "Tema oscuro en las aplicaciones",
+            "Pone en oscuro las apps que respetan el tema de Windows.",
+            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 0),
+
+        Ui("ui.darkmode.system", "Tema oscuro en Windows",
+            "Pone en oscuro la barra de tareas, el menú Inicio y el centro de notificaciones.",
+            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0),
+
+        Ui("ui.spotlight", "Quitar Windows Spotlight de la pantalla de bloqueo",
+            "Deja de descargar imágenes y anuncios de Microsoft para la pantalla de bloqueo.",
+            @"Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 0),
+
+        Ui("ui.numlock", "NumLock activado al iniciar",
+            "Enciende el teclado numérico al arrancar Windows, antes de escribir la contraseña.",
+            @"Control Panel\Keyboard", "InitialKeyboardIndicators", "2", RegistryValueKind.String),
+
+        Ui("ui.stickykeys", "Desactivar teclas especiales",
+            "Quita el aviso que salta al pulsar Mayús cinco veces, molesto sobre todo jugando.",
+            @"Control Panel\Accessibility\StickyKeys", "Flags", "506", RegistryValueKind.String),
+
+        // El menú de Windows 11 se apaga vaciando el valor predeterminado de este CLSID, que es
+        // justo el que lo activa. Al revertir, el valor se borra y vuelve el menú nuevo.
+        Ui("ui.classicmenu", "Menú contextual clásico",
+            "Devuelve el menú del botón derecho completo de Windows 10, sin el paso «Mostrar más opciones». Requiere reiniciar el Explorador.",
+            @"Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32", "", "",
+            RegistryValueKind.String),
+
+        new RegistryTweak
+        {
+            Id = "ui.nolockscreen",
+            Name = "Saltar la pantalla de bloqueo",
+            Description = "Va directo a la pantalla de contraseña al encender o desbloquear el equipo.",
+            Category = TweakCategory.Interface,
+            Risk = RiskLevel.Safe,
+            Hive = RegistryHive.LocalMachine,
+            SubKey = @"SOFTWARE\Policies\Microsoft\Windows\Personalization",
+            ValueName = "NoLockScreen",
+            EnabledValue = 1,
+        },
+        new RegistryTweak
+        {
+            Id = "ui.loginblur",
+            Name = "Quitar el desenfoque del inicio de sesión",
+            Description = "Muestra el fondo nítido en la pantalla de inicio de sesión, sin el efecto de cristal.",
+            Category = TweakCategory.Interface,
+            Risk = RiskLevel.Safe,
+            Hive = RegistryHive.LocalMachine,
+            SubKey = @"SOFTWARE\Policies\Microsoft\Windows\System",
+            ValueName = "DisableAcrylicBackgroundOnLogon",
+            EnabledValue = 1,
+        },
+        new RegistryTweak
+        {
+            Id = "ui.detailedbsod",
+            Name = "Pantallazo azul con detalles",
+            Description = "Muestra los parámetros del error en la pantalla azul, útiles para diagnosticar qué falló.",
+            Category = TweakCategory.Interface,
+            Risk = RiskLevel.Safe,
+            DefaultEnabled = true,
+            Hive = RegistryHive.LocalMachine,
+            SubKey = @"SYSTEM\CurrentControlSet\Control\CrashControl",
+            ValueName = "DisplayParameters",
+            EnabledValue = 1,
+        },
         new RegistryTweak
         {
             Id = "ui.verbosestatus",

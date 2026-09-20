@@ -65,9 +65,12 @@ public class DebloatCatalogTests
     {
         Assert.All(TweakCatalog.Debloat.OfType<AppxPackageTweak>(), t =>
         {
+            // Un comodín aquí desinstalaría media Tienda; el nombre tiene que ser el exacto.
+            // Ojo: algunos no llevan punto (el Teams nuevo se llama "MSTeams" a secas).
             Assert.DoesNotContain("*", t.PackageName);
-            Assert.Contains(".", t.PackageName);
+            Assert.DoesNotContain("?", t.PackageName);
             Assert.DoesNotContain(" ", t.PackageName);
+            Assert.True(t.PackageName.Length > 4, $"{t.Id} tiene un nombre de paquete sospechosamente corto");
         });
     }
 }
@@ -109,6 +112,8 @@ public class PresetCatalogTests
             Assert.True(t.IsReversible, $"{t.Id} no es reversible y está en {preset.Id}");
             Assert.NotEqual(TweakCategory.Debloat, t.Category);
             Assert.NotEqual(TweakCategory.Advanced, t.Category);
+            // Cambiar el navegador de alguien (su sincronización, por ejemplo) se decide a mano.
+            Assert.NotEqual(TweakCategory.Browsers, t.Category);
         }));
     }
 
