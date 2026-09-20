@@ -26,6 +26,9 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
     [ObservableProperty] private double diskFreeGb;
     [ObservableProperty] private double diskTotalGb;
     [ObservableProperty] private long? pingMs;
+    [ObservableProperty] private double netDownKbps;
+    [ObservableProperty] private double netUpKbps;
+    [ObservableProperty] private double cpuMhz;
     [ObservableProperty] private bool isBusy;
     [ObservableProperty] private string? statusMessage;
     [ObservableProperty] private string? deltaMessage;
@@ -38,6 +41,18 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
     [ObservableProperty] private int totalRecommendedCount;
 
     public ObservableCollection<MissingOptimizationRowViewModel> MissingOptimizations { get; } = new();
+
+    [ObservableProperty] private string cpuName = "";
+    [ObservableProperty] private string gpuName = "";
+    [ObservableProperty] private string osName = "";
+    [ObservableProperty] private string motherboard = "";
+    public ObservableCollection<RamModuleInfo> RamModules { get; } = new();
+    public ObservableCollection<SystemBadge> WindowsBadges { get; } = new();
+    public ObservableCollection<SystemBadge> BoardBadges { get; } = new();
+
+    /// <summary>Used space of the system drive, for the storage card.</summary>
+    public double DiskUsedGb => Math.Max(0, DiskTotalGb - DiskFreeGb);
+    public double DiskUsedPercent => DiskTotalGb > 0 ? DiskUsedGb / DiskTotalGb * 100 : 0;
 
     public List<double> CpuHistory { get; } = new();
     public List<double> RamHistory { get; } = new();
@@ -55,6 +70,27 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
         };
         _timer.Start();
         _ = SampleAsync();
+        _ = LoadOverviewAsync();
+    }
+
+    /// <summary>The machine description comes from WMI, which is slow - load it once, off the UI thread.</summary>
+    private async Task LoadOverviewAsync()
+    {
+        try
+        {
+            var overview = await Task.Run(SystemOverviewService.Get);
+            CpuName = overview.CpuName;
+            GpuName = overview.GpuName;
+            OsName = overview.OsName;
+            Motherboard = overview.Motherboard;
+            foreach (var module in overview.RamModules) RamModules.Add(module);
+            foreach (var badge in overview.WindowsBadges) WindowsBadges.Add(badge);
+            foreach (var badge in overview.BoardBadges) BoardBadges.Add(badge);
+        }
+        catch (Exception ex)
+        {
+            AppLog.Error("Dashboard overview", ex);
+        }
     }
 
     public void Pause() => _timer.Stop();
@@ -71,6 +107,11 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
         CpuTempCelsius = stats.CpuTempCelsius;
         DiskFreeGb = stats.DiskFreeGb;
         DiskTotalGb = stats.DiskTotalGb;
+        NetDownKbps = stats.NetDownKbps;
+        NetUpKbps = stats.NetUpKbps;
+        CpuMhz = stats.CpuMhz;
+        OnPropertyChanged(nameof(DiskUsedGb));
+        OnPropertyChanged(nameof(DiskUsedPercent));
 
         Push(CpuHistory, stats.CpuPercent);
         Push(RamHistory, stats.RamPercent);
@@ -131,6 +172,7 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
     {
         IsAnalyzing = true;
         using var busy = BusyService.Instance.Begin("Analizando qué optimizaciones te faltan...");
+        ActivityLog.Instance.Info("Dashboard: analizando optimizaciones recomendadas...");
 
         var (score, applied, total, missing) = await Task.Run(() =>
         {
@@ -155,6 +197,8 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
 
         HasAnalyzed = true;
         IsAnalyzing = false;
+        ActivityLog.Instance.Info(
+            $"Dashboard: {applied} de {total} optimizaciones aplicadas ({score:F0}%). Faltan {MissingOptimizations.Count}.");
     }
 
     [RelayCommand]
@@ -174,8 +218,13 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
         var (_, results) = await Task.Run(() =>
         {
             var pending = GetRecommendedTweaks().Where(t => !SafeIsApplied(t)).ToList();
+            ActivityLog.Instance.Info($"Dashboard: aplicando {pending.Count} tweak(s) recomendado(s)...");
+            RestorePointGuard.EnsureBeforeChanges("tweaks recomendados del Dashboard");
             return AppServices.Engine.ApplyMany(pending, "Aplicar recomendado (Dashboard)");
         });
+
+        foreach (var r in results.Where(r => r.Success)) ActivityLog.Instance.Ok($"Aplicado: {r.Tweak.Name}");
+        foreach (var r in results.Where(r => !r.Success)) ActivityLog.Instance.Fail($"Falló «{r.Tweak.Name}»: {r.Error}");
 
         foreach (var r in results.Where(r => r.Success && r.Tweak.RequiresRestart))
             PendingRestartService.Instance.MarkNeeded(r.Tweak.Name);

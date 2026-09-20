@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using NexaTweaks.App.Services;
 using NexaTweaks.App.Views;
 using NexaTweaks.Core;
+using NexaTweaks.Core.Diagnostics;
 using NexaTweaks.Core.Repair;
 
 namespace NexaTweaks.App.ViewModels;
@@ -34,18 +35,29 @@ public partial class RepairViewModel : ObservableObject
         card.IsRunning = true;
         card.Output = null;
         card.LastSuccess = null;
+        ActivityLog.Instance.Info($"Reparación: ejecutando «{card.Name}» ({card.EstimatedDuration})...");
 
         RepairActionResult result;
         using (BusyService.Instance.Begin($"Ejecutando {card.Name}...\n{card.EstimatedDuration}"))
         {
-            result = await Task.Run(() => card.Action.Run());
+            result = await Task.Run(() =>
+            {
+                if (card.Risk != RiskLevel.Safe) RestorePointGuard.EnsureBeforeChanges($"reparación «{card.Name}»");
+                return card.Action.Run();
+            });
         }
 
         card.Output = result.Output;
         card.LastSuccess = result.Success;
         card.IsRunning = false;
 
+        if (result.Success) ActivityLog.Instance.Ok($"Reparación completada: {card.Name}");
+        else ActivityLog.Instance.Fail($"Reparación con errores: {card.Name}");
+
         if (result.Success && card.Action.RequiresRestart)
+        {
             PendingRestartService.Instance.MarkNeeded(card.Name);
+            ActivityLog.Instance.Warn($"«{card.Name}» necesita reiniciar el equipo.");
+        }
     }
 }

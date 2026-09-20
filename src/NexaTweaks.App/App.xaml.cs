@@ -19,11 +19,32 @@ public partial class App : Application
         DispatcherUnhandledException += OnDispatcherUnhandledException;
         AppDomain.CurrentDomain.UnhandledException += OnAppDomainUnhandledException;
         TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
+
+        var version = typeof(App).Assembly.GetName().Version?.ToString(3) ?? "?";
+        ActivityLog.Instance.Info($"Nexa Tweaks {version} iniciado.");
+        ActivityLog.Instance.Info(IsAdministrator()
+            ? "Ejecutando como administrador: todos los cambios disponibles."
+            : "Sin permisos de administrador: algunos cambios no podrán aplicarse.");
+    }
+
+    private static bool IsAdministrator()
+    {
+        try
+        {
+            using var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            return new System.Security.Principal.WindowsPrincipal(identity)
+                .IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     private static void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
         AppLog.Error("UI thread", e.Exception);
+        ActivityLog.Instance.Fail($"Error inesperado: {e.Exception.Message}");
         MessageBox.Show(
             $"Ocurrió un error inesperado y NexaTweaks lo interceptó antes de que cerrara la app.\n\n{e.Exception.Message}\n\nDetalles guardados en el registro de errores (Ajustes > Carpeta de copias de seguridad).",
             "NexaTweaks - Error", MessageBoxButton.OK, MessageBoxImage.Warning);

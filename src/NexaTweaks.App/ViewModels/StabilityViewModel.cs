@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NexaTweaks.App.Services;
 using NexaTweaks.App.Views;
+using NexaTweaks.Core.Diagnostics;
 using NexaTweaks.Core.Stability;
 
 namespace NexaTweaks.App.ViewModels;
@@ -22,6 +23,7 @@ public partial class StabilityViewModel : ObservableObject
     private async Task AnalyzeAsync()
     {
         IsAnalyzing = true;
+        ActivityLog.Instance.Info("Estabilidad: analizando eventos, drivers y hardware...");
 
         IReadOnlyList<StabilityFinding> findings;
         using (BusyService.Instance.Begin("Analizando estabilidad...\nVisor de eventos, drivers y hardware"))
@@ -36,6 +38,11 @@ public partial class StabilityViewModel : ObservableObject
         Summary = BuildSummary(findings);
         HasAnalyzed = true;
         IsAnalyzing = false;
+
+        if (findings.Count == 0) ActivityLog.Instance.Ok("Estabilidad: sin problemas detectados.");
+        else ActivityLog.Instance.Warn($"Estabilidad: {findings.Count} hallazgo(s). {Summary}");
+        foreach (var finding in findings.Where(f => f.Severity == StabilitySeverity.High))
+            ActivityLog.Instance.Fail($"Grave · {finding.Title}");
     }
 
     [RelayCommand]
@@ -51,15 +58,22 @@ public partial class StabilityViewModel : ObservableObject
         if (!proceed) return;
 
         card.IsBusy = true;
+        ActivityLog.Instance.Info($"Estabilidad: aplicando «{fix.Name}»...");
         var (result, _) = await Task.Run(() =>
-            AppServices.Engine.ApplyOneWithEntry(fix, $"Estabilidad: {fix.Name}"));
+        {
+            RestorePointGuard.EnsureBeforeChanges($"arreglo «{fix.Name}»");
+            return AppServices.Engine.ApplyOneWithEntry(fix, $"Estabilidad: {fix.Name}");
+        });
         card.IsBusy = false;
 
         if (!result.Success)
         {
             card.StatusMessage = $"No se pudo aplicar: {result.Error}";
+            ActivityLog.Instance.Fail($"No se pudo aplicar «{fix.Name}»: {result.Error}");
             return;
         }
+
+        ActivityLog.Instance.Ok($"Arreglado: {fix.Name}");
 
         card.IsFixed = true;
         card.StatusMessage = fix.RequiresRestart

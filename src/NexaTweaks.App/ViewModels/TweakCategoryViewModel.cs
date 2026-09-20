@@ -6,6 +6,7 @@ using NexaTweaks.App.Services;
 using NexaTweaks.App.Views;
 using NexaTweaks.Core;
 using NexaTweaks.Core.Backup;
+using NexaTweaks.Core.Diagnostics;
 using NexaTweaks.Core.Tweaks;
 
 namespace NexaTweaks.App.ViewModels;
@@ -94,9 +95,13 @@ public partial class TweakCategoryViewModel : ObservableObject
         var failed = 0;
 
         using var busy = BusyService.Instance.Begin($"Aplicando {pending.Count} cambio(s) en {Title}...");
+        ActivityLog.Instance.Info($"{Title}: aplicando {pending.Count} cambio(s)...");
 
         await Task.Run(() =>
         {
+            RestorePointGuard.EnsureBeforeChanges($"cambios en {Title}");
+
+
             foreach (var card in pending)
             {
                 if (card.IsSelected && card.Risk != RiskLevel.Safe)
@@ -123,14 +128,19 @@ public partial class TweakCategoryViewModel : ObservableObject
                         applied++;
                         card.LastAppliedSelection = true;
                         if (entry is not null) card.KnownBackupEntry = entry;
+                        ActivityLog.Instance.Ok($"Aplicado: {card.Name}");
                         if (card.Tweak.RequiresRestart)
+                        {
                             PendingRestartService.Instance.MarkNeeded(card.Name);
+                            ActivityLog.Instance.Warn($"«{card.Name}» necesita reiniciar para surtir efecto.");
+                        }
                     }
                     else
                     {
                         failed++;
                         card.StatusMessage = result.Error;
                         card.IsSelected = card.LastAppliedSelection;
+                        ActivityLog.Instance.Fail($"Falló «{card.Name}»: {result.Error}");
                     }
                 }
                 else
@@ -142,18 +152,21 @@ public partial class TweakCategoryViewModel : ObservableObject
                         {
                             applied++;
                             card.LastAppliedSelection = false;
+                            ActivityLog.Instance.Ok($"Revertido: {card.Name}");
                         }
                         else
                         {
                             failed++;
                             card.StatusMessage = result.Error;
                             card.IsSelected = card.LastAppliedSelection;
+                            ActivityLog.Instance.Fail($"No se pudo revertir «{card.Name}»: {result.Error}");
                         }
                     }
                     else
                     {
                         card.StatusMessage = "No hay una copia previa para revertir este cambio.";
                         card.IsSelected = card.LastAppliedSelection;
+                        ActivityLog.Instance.Warn($"«{card.Name}»: no hay copia previa para revertir.");
                     }
                 }
 
@@ -164,6 +177,8 @@ public partial class TweakCategoryViewModel : ObservableObject
         StatusMessage = failed == 0
             ? $"{applied} cambio(s) aplicados correctamente."
             : $"{applied} aplicados, {failed} con errores (revisa cada tarjeta).";
+        if (failed == 0) ActivityLog.Instance.Ok($"{Title}: {applied} cambio(s) listos.");
+        else ActivityLog.Instance.Warn($"{Title}: {applied} aplicados, {failed} con errores.");
         IsBusy = false;
         OnPropertyChanged(nameof(PendingCount));
     }

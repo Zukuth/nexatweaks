@@ -130,7 +130,14 @@
             </DockPanel>
         </Border>
 
-        <ContentControl x:Name="ContentHost" Grid.Column="1"/>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ContentControl x:Name="ContentHost" Grid.Row="0"/>
+            <views:ActivityLogPanel Grid.Row="1"/>
+        </Grid>
 
         <views:BusyOverlay Grid.Column="0" Grid.ColumnSpan="2"/>
         </Grid>

@@ -1,0 +1,96 @@
+<UserControl x:Class="NexaTweaks.App.Views.ActivityLogPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:diag="clr-namespace:NexaTweaks.Core.Diagnostics;assembly=NexaTweaks.Core">
+    <Border Background="{StaticResource BgSidebarBrush}" BorderBrush="{StaticResource BorderBrush2}" BorderThickness="0,1,0,0">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Barra de estado -->
+            <Grid Grid.Row="0" Margin="24,10,20,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <CheckBox Grid.Column="0" Content="Punto de restauración" VerticalAlignment="Center"
+                          Foreground="{StaticResource TextSecondaryBrush}" FontSize="11.5"
+                          ToolTip="Crea un punto de restauración de Windows antes de aplicar una tanda de cambios."
+                          IsChecked="{Binding CreateRestorePoint, Mode=TwoWay}"/>
+
+                <TextBlock Grid.Column="1" Text="{Binding StatusText}" Style="{StaticResource CaptionText}"
+                           VerticalAlignment="Center" Margin="22,0,16,0" TextTrimming="CharacterEllipsis" MaxWidth="620"/>
+
+                <Border Grid.Column="2" Height="4" CornerRadius="2" VerticalAlignment="Center"
+                        Background="{StaticResource BgCardBrush}" Margin="0,0,16,0"/>
+
+                <Button Grid.Column="3" Style="{StaticResource SecondaryButton}" Padding="10,4" FontSize="11"
+                        Command="{Binding ToggleLogCommand}">
+                    <TextBlock>
+                        <Run Text="Registro"/>
+                        <Run Text="▾"/>
+                    </TextBlock>
+                </Button>
+            </Grid>
+
+            <!-- Registro -->
+            <Grid Grid.Row="1" Visibility="{Binding IsLogVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Margin="24,0,20,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Width="3" Height="13" CornerRadius="2" Background="{StaticResource AccentVioletBrush}"
+                            VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <TextBlock Grid.Column="1" Text="REGISTRO" FontSize="10.5" FontWeight="Bold" VerticalAlignment="Center"
+                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                    <Button Grid.Column="2" Content="Copiar" Style="{StaticResource SecondaryButton}" Padding="10,3" FontSize="10.5"
+                            Margin="0,0,8,0" Command="{Binding CopyLogCommand}" ToolTip="Copiar todo el registro"/>
+                    <Button Grid.Column="3" Content="Limpiar" Style="{StaticResource SecondaryButton}" Padding="10,3" FontSize="10.5"
+                            Command="{Binding ClearLogCommand}" ToolTip="Vaciar el registro"/>
+                </Grid>
+
+                <Border Grid.Row="1" Background="{StaticResource BgWindowBrush}" Margin="24,0,20,14" CornerRadius="8" Padding="12,8">
+                    <ScrollViewer x:Name="LogScroll" Height="104" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding Entries}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type diag:ActivityEntry}">
+                                    <TextBlock Text="{Binding Line}" FontFamily="Consolas" FontSize="11" Margin="0,1" TextWrapping="Wrap">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Level}" Value="Ok">
+                                                        <Setter Property="Foreground" Value="{StaticResource SafeBrush}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Level}" Value="Warn">
+                                                        <Setter Property="Foreground" Value="{StaticResource AdvancedBrush}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Level}" Value="Fail">
+                                                        <Setter Property="Foreground" Value="{StaticResource RiskyBrush}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>
