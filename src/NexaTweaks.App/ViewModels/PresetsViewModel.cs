@@ -89,7 +89,7 @@ public partial class PresetsViewModel : ObservableObject
 
         var results = await Task.Run(() =>
         {
-            var pending = card.Preset.Tweaks.Where(NotYetApplied).ToList();
+            var pending = card.Preset.Tweaks.Where(Available).Where(NotYetApplied).ToList();
             if (pending.Count == 0) return new List<TweakResult>();
 
             ActivityLog.Instance.Info($"Preset {card.Name}: aplicando {pending.Count} pendientes...");
@@ -114,6 +114,14 @@ public partial class PresetsViewModel : ObservableObject
         ActivityLog.Instance.Add(failed == 0 ? ActivityLevel.Ok : ActivityLevel.Warn,
             $"Preset {card.Name}: {StatusMessage}");
         IsBusy = false;
+    }
+
+    /// <summary>Skips what this machine doesn't have (a missing service, software not installed):
+    /// applying those only produces errors in the log.</summary>
+    private static bool Available(ITweak tweak)
+    {
+        try { return tweak.IsAvailable(); }
+        catch { return true; }
     }
 
     /// <summary>A tweak whose current state can't be read is treated as pending: applying it again

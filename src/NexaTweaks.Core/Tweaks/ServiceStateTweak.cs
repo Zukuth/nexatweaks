@@ -13,6 +13,8 @@ public sealed class ServiceStateTweak : TweakBase
     public required string DesiredStartMode { get; init; }
     public bool StopServiceWhenDisabling { get; init; } = true;
 
+    public override bool IsAvailable() => GetStartMode() is not null;
+
     public override bool IsApplied()
     {
         var mode = GetStartMode();
@@ -39,21 +41,7 @@ public sealed class ServiceStateTweak : TweakBase
             TryStartService();
     }
 
-    private string? GetStartMode()
-    {
-        try
-        {
-            using var searcher = new ManagementObjectSearcher(
-                $"SELECT StartMode FROM Win32_Service WHERE Name='{Escape(ServiceName)}'");
-            foreach (ManagementObject mo in searcher.Get())
-                return mo["StartMode"]?.ToString();
-        }
-        catch
-        {
-            // service missing or WMI unavailable
-        }
-        return null;
-    }
+    private string? GetStartMode() => ServiceStartModes.Get(ServiceName);
 
     private void SetStartMode(string mode)
     {
@@ -80,6 +68,8 @@ public sealed class ServiceStateTweak : TweakBase
 
         if (!found)
             throw new InvalidOperationException($"No se encontró el servicio '{ServiceName}' en este equipo.");
+
+        ServiceStartModes.Invalidate();
     }
 
     private void TryStopService()

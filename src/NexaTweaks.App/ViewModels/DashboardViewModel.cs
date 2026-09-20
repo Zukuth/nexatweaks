@@ -219,7 +219,7 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
         // in the background, same as the actual apply step.
         var (_, results) = await Task.Run(() =>
         {
-            var pending = GetRecommendedTweaks().Where(t => !SafeIsApplied(t)).ToList();
+            var pending = GetRecommendedTweaks().Where(SafeIsAvailable).Where(t => !SafeIsApplied(t)).ToList();
             ActivityLog.Instance.Info($"Dashboard: aplicando {pending.Count} tweak(s) recomendado(s)...");
             RestorePointGuard.EnsureBeforeChanges("tweaks recomendados del Dashboard");
             return AppServices.Engine.ApplyMany(pending, "Aplicar recomendado (Dashboard)");
@@ -252,6 +252,11 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
     private static bool SafeIsApplied(ITweak tweak)
     {
         try { return tweak.IsApplied(); } catch { return false; }
+    }
+
+    private static bool SafeIsAvailable(ITweak tweak)
+    {
+        try { return tweak.IsAvailable(); } catch { return true; }
     }
 
     public void Dispose() => _timer.Stop();

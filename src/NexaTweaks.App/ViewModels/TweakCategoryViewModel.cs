@@ -52,18 +52,30 @@ public partial class TweakCategoryViewModel : ObservableObject
         IsBusy = true;
 
         var tweaksSnapshot = Cards.Select(c => c.Tweak).ToList();
-        var (latestEntries, appliedById) = await Task.Run(() =>
+        var (latestEntries, appliedById, availableById) = await Task.Run(() =>
         {
             var entries = AppServices.Engine.LoadLatestEntriesByTweakId();
             var applied = tweaksSnapshot.ToDictionary(t => t.Id, SafeIsApplied);
-            return (entries, applied);
+            var available = tweaksSnapshot.ToDictionary(t => t.Id, SafeIsAvailable);
+            return (entries, applied, available);
         });
 
+        var unavailable = 0;
         foreach (var card in Cards)
         {
             var hasEntry = latestEntries.TryGetValue(card.Tweak.Id, out var entry);
             var isApplied = appliedById.TryGetValue(card.Tweak.Id, out var a) && a;
             var groundTruth = isApplied || (hasEntry && card.Tweak.DefaultEnabled);
+
+            card.IsAvailable = !availableById.TryGetValue(card.Tweak.Id, out var av) || av;
+            if (!card.IsAvailable)
+            {
+                unavailable++;
+                card.StatusMessage = "No disponible en este equipo: Windows no tiene este componente o el programa no está instalado.";
+                card.IsSelected = false;
+                card.LastAppliedSelection = false;
+                continue;
+            }
 
             card.KnownBackupEntry = hasEntry ? entry : null;
 
@@ -75,12 +87,20 @@ public partial class TweakCategoryViewModel : ObservableObject
         }
 
         IsBusy = false;
+        if (unavailable > 0)
+            ActivityLog.Instance.Info($"{Title}: {unavailable} ajuste(s) no aplican a este equipo y quedan deshabilitados.");
     }
 
     private static bool SafeIsApplied(ITweak tweak)
     {
         try { return tweak.IsApplied(); }
         catch { return false; }
+    }
+
+    private static bool SafeIsAvailable(ITweak tweak)
+    {
+        try { return tweak.IsAvailable(); }
+        catch { return true; }
     }
 
     [RelayCommand]
