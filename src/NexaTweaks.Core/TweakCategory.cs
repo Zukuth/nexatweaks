@@ -11,7 +11,8 @@ public enum TweakCategory
     Advanced,
     Services,
     Privacy,
-    Interface
+    Interface,
+    Debloat
 }
 
 public enum RiskLevel

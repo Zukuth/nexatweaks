@@ -1,0 +1,118 @@
+<UserControl x:Class="NexaTweaks.App.Views.PresetsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:NexaTweaks.App.ViewModels">
+    <UserControl.Resources>
+        <DataTemplate x:Key="PresetCardTemplate" DataType="{x:Type vm:PresetCardViewModel}">
+            <Button Command="{Binding DataContext.SelectCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    CommandParameter="{Binding}" HorizontalContentAlignment="Stretch" Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Card" Background="{StaticResource BgCardBrush}" CornerRadius="12" Padding="18"
+                                BorderBrush="{StaticResource BorderBrush2}" BorderThickness="1.5" Margin="0,0,12,0">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Card" Property="Background" Value="{StaticResource BgCardHoverBrush}"/>
+                            </Trigger>
+                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                <Setter TargetName="Card" Property="BorderBrush" Value="{StaticResource AccentCyanBrush}"/>
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}"/>
+                    <TextBlock Text="{Binding CountText}" Style="{StaticResource CaptionText}" Margin="0,2,0,10"/>
+                    <TextBlock Text="{Binding Description}" Style="{StaticResource BodyText}" TextWrapping="Wrap" FontSize="11.5"/>
+                </StackPanel>
+            </Button>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="32,28,32,18">
+            <TextBlock Text="Presets" Style="{StaticResource TitleText}"/>
+            <TextBlock Text="Tandas de ajustes listas para aplicar de una vez. Cada nivel incluye el anterior y todo queda guardado en Backup."
+                       Style="{StaticResource BodyText}" Margin="0,6,0,18"/>
+            <ItemsControl ItemsSource="{Binding Presets}" ItemTemplate="{StaticResource PresetCardTemplate}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="1"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" Margin="32,0,32,24" VerticalScrollBarVisibility="Auto">
+            <Border Style="{StaticResource CardBorder}" DataContext="{Binding Selected}">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource SectionHeaderText}">
+                                <Run Text="Ajustes de "/>
+                                <Run Text="{Binding Name, Mode=OneWay}"/>
+                            </TextBlock>
+                            <TextBlock Text="{Binding Description}" Style="{StaticResource BodyText}" TextWrapping="Wrap" Margin="0,4,16,0"/>
+                        </StackPanel>
+                        <Button Grid.Column="1" Content="Aplicar preset" Style="{StaticResource PrimaryButton}" VerticalAlignment="Center"
+                                Command="{Binding DataContext.ApplyCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                IsEnabled="{Binding DataContext.IsBusy, RelativeSource={RelativeSource AncestorType=UserControl},
+                                                    Converter={StaticResource InverseBoolConverter}}"/>
+                    </Grid>
+
+                    <TextBlock Text="EN QUÉ SE CONCENTRA" Style="{StaticResource CaptionText}" FontWeight="Bold" Margin="0,20,0,8"/>
+                    <ItemsControl ItemsSource="{Binding Categories}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate><UniformGrid Columns="4"/></ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:PresetCategoryRow}">
+                                <StackPanel Margin="0,0,16,10">
+                                    <TextBlock Style="{StaticResource CaptionText}">
+                                        <Run Text="{Binding Category, Mode=OneWay}"/>
+                                        <Run Text="  "/>
+                                        <Run Text="{Binding Count, Mode=OneWay}" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold"/>
+                                    </TextBlock>
+                                    <ProgressBar Height="5" BorderThickness="0" Margin="0,4,0,0" Maximum="60"
+                                                 Background="{StaticResource BgWindowBrush}" Foreground="{StaticResource AccentCyanBrush}"
+                                                 Value="{Binding Count, Mode=OneWay}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <TextBlock Text="SE APLICARÁN" Style="{StaticResource CaptionText}" FontWeight="Bold" Margin="0,14,0,8"/>
+                    <ItemsControl ItemsSource="{Binding Highlights}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{StaticResource BgWindowBrush}" CornerRadius="7" Padding="9,4" Margin="0,0,8,8">
+                                    <TextBlock Text="{Binding}" FontSize="10.5" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock Text="… y el resto hasta completar el preset." Style="{StaticResource CaptionText}" FontStyle="Italic"/>
+
+                    <TextBlock Text="{Binding DataContext.StatusMessage, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                               Style="{StaticResource BodyText}" Foreground="{StaticResource SafeBrush}" Margin="0,14,0,0" TextWrapping="Wrap"
+                               Visibility="{Binding DataContext.StatusMessage, RelativeSource={RelativeSource AncestorType=UserControl},
+                                                    Converter={StaticResource NullToVisibilityConverter}}"/>
+                </StackPanel>
+            </Border>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

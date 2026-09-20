@@ -25,6 +25,7 @@ public static partial class TweakCatalog
         .Concat(Input)
         .Concat(Gpu)
         .Concat(Cleanup)
+        .Concat(Debloat)
         .Concat(Advanced)
         .ToList();
 }

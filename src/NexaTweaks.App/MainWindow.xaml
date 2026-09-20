@@ -46,6 +46,18 @@
                             <TextBlock Text="Windows"/>
                         </StackPanel>
                     </RadioButton>
+                    <RadioButton x:Name="NavPresets" Style="{StaticResource NavItemButton}" Checked="Nav_Checked" Tag="Presets">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="6" Height="6" Fill="{StaticResource AccentCyanBrush}" Margin="0,0,10,0"/>
+                            <TextBlock Text="Presets"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavDebloat" Style="{StaticResource NavItemButton}" Checked="Nav_Checked" Tag="Debloat">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="6" Height="6" Fill="{StaticResource AdvancedBrush}" Margin="0,0,10,0"/>
+                            <TextBlock Text="Debloatware"/>
+                        </StackPanel>
+                    </RadioButton>
                     <RadioButton x:Name="NavPrivacy" Style="{StaticResource NavItemButton}" Checked="Nav_Checked" Tag="Privacy">
                         <StackPanel Orientation="Horizontal">
                             <Ellipse Width="6" Height="6" Fill="{StaticResource AccentCyanBrush}" Margin="0,0,10,0"/>

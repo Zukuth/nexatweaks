@@ -37,6 +37,10 @@ public partial class MainWindow : Window
         "Dashboard" => new DashboardView(new DashboardViewModel()),
         "Windows" => new TweakCategoryView(new TweakCategoryViewModel(
             "Windows", "Servicios, telemetría, efectos visuales y plan de energía.", TweakCatalog.Windows)),
+        "Presets" => new PresetsView(new PresetsViewModel()),
+        "Debloat" => new TweakCategoryView(new TweakCategoryViewModel(
+            "Debloatware", "Apps preinstaladas de la Tienda. Desinstalar es de ida: para recuperarlas hay que bajarlas de Microsoft Store.",
+            TweakCatalog.Debloat)),
         "Privacy" => new TweakCategoryView(new TweakCategoryViewModel(
             "Privacidad", "Telemetría, Copilot, Recall, widgets y permisos de las apps de la Tienda.", TweakCatalog.Privacy)),
         "Services" => new TweakCategoryView(new TweakCategoryViewModel(

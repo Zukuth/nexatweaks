@@ -11,6 +11,8 @@ Centraliza en una sola app tweaks de sistema, limpieza, monitoreo, gestión de a
 
 - **Dashboard** — estado general del equipo de un vistazo.
 - **Windows (Tweaks)** — catálogo de ajustes del sistema (registro, servicios, tareas programadas, planes de energía, Nagle, comandos), aplicables y reversibles.
+- **Presets** — tres niveles listos para aplicar de una vez (Seguro 66, Medio 91, Extremo 124 ajustes). Cada nivel incluye el anterior; ninguno toca la categoría Avanzado, el debloatware, los cambios irreversibles ni los permisos de cámara/micrófono.
+- **Debloatware** — desinstala apps preinstaladas de la Tienda (28), quitando también su copia aprovisionada para que Windows no las reponga. Es de ida: se marcan como no reversibles y nunca vienen activadas.
 - **Privacidad** — telemetría, Copilot, Recall, widgets, contenido sugerido y permisos de las apps de la Tienda (23 ajustes).
 - **Servicios** — servicios de Windows que un PC doméstico no necesita, con su modo de inicio anterior guardado (27 ajustes). Windows Update, Defender, el firewall y el registro de eventos quedan fuera a propósito, y hay una prueba que lo impide.
 - **Interfaz** — barra de tareas y Explorador (alineación, extensiones, archivos ocultos, Vista de tareas, Chat).
