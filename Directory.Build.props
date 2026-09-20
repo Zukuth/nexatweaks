@@ -6,7 +6,7 @@
        the installer filename, and what ships in a release — see the incident where an
        installer built from stale code got published before a security fix. -->
   <PropertyGroup>
-    <NexaTweaksVersion>0.1.0</NexaTweaksVersion>
+    <NexaTweaksVersion>0.2.0</NexaTweaksVersion>
   </PropertyGroup>
 
 </Project>
