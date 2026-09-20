@@ -86,12 +86,7 @@ public partial class BackupViewModel : ObservableObject
 
     private static Dictionary<string, ITweak> BuildTweaksById()
     {
-        var all = TweakCatalog.Windows
-            .Concat(TweakCatalog.Network)
-            .Concat(TweakCatalog.Input)
-            .Concat(TweakCatalog.Gpu)
-            .Concat(TweakCatalog.Cleanup)
-            .Concat(TweakCatalog.Advanced)
+        var all = TweakCatalog.All
             .Concat(StabilityFixes.All)
             .Concat(StartupItemDiscovery.Discover());
 

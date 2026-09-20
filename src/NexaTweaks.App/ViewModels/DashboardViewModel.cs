@@ -146,12 +146,11 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
         if (history.Count > HistoryLength) history.RemoveAt(0);
     }
 
+    /// <summary>Only the safe tweaks that the catalog marks as recommended - Avanzado never
+    /// enters here, and neither do the risky ones of any category.</summary>
     private static List<ITweak> GetRecommendedTweaks() =>
-        TweakCatalog.Windows
-            .Concat(TweakCatalog.Network)
-            .Concat(TweakCatalog.Input)
-            .Concat(TweakCatalog.Gpu)
-            .Concat(TweakCatalog.Cleanup)
+        TweakCatalog.All
+            .Where(t => t.Category != TweakCategory.Advanced)
             .Where(t => t.Risk == RiskLevel.Safe && t.DefaultEnabled)
             .ToList();
 
@@ -164,6 +163,9 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
         TweakCategory.Cleanup => "Limpieza",
         TweakCategory.Booster => "Booster",
         TweakCategory.Advanced => "Avanzado",
+        TweakCategory.Services => "Servicios",
+        TweakCategory.Privacy => "Privacidad",
+        TweakCategory.Interface => "Interfaz",
         _ => category.ToString(),
     };
 

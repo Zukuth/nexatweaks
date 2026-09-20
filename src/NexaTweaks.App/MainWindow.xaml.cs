@@ -37,6 +37,12 @@ public partial class MainWindow : Window
         "Dashboard" => new DashboardView(new DashboardViewModel()),
         "Windows" => new TweakCategoryView(new TweakCategoryViewModel(
             "Windows", "Servicios, telemetría, efectos visuales y plan de energía.", TweakCatalog.Windows)),
+        "Privacy" => new TweakCategoryView(new TweakCategoryViewModel(
+            "Privacidad", "Telemetría, Copilot, Recall, widgets y permisos de las apps de la Tienda.", TweakCatalog.Privacy)),
+        "Services" => new TweakCategoryView(new TweakCategoryViewModel(
+            "Servicios", "Servicios de Windows que un PC doméstico no necesita. Windows Update y Defender nunca se tocan.", TweakCatalog.Services)),
+        "Interface" => new TweakCategoryView(new TweakCategoryViewModel(
+            "Interfaz", "Barra de tareas y Explorador a tu gusto. Algunos cambios piden reiniciar el Explorador.", TweakCatalog.Interface)),
         "Network" => new NetworkView(new NetworkViewModel()),
         "Input" => new TweakCategoryView(new TweakCategoryViewModel(
             "Input", "Mouse y teclado sin aceleración, respuesta 1:1.", TweakCatalog.Input)),

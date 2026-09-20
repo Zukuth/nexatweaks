@@ -8,7 +8,10 @@ public enum TweakCategory
     Gpu,
     Cleanup,
     Booster,
-    Advanced
+    Advanced,
+    Services,
+    Privacy,
+    Interface
 }
 
 public enum RiskLevel
