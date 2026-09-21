@@ -16,3 +16,6 @@ dist/
 # OS
 Thumbs.db
 .DS_Store
+
+# Documentos de trabajo (planes, specs): el repositorio publica solo la app
+docs/
