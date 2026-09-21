@@ -297,11 +297,11 @@ public class StabilityChecksTests
     public void OldBios_OlderThan2Years_IsReported()
     {
         var probe = new FakeStabilityProbe()
-            .AddWmi("Win32_BIOS", new() { ["SMBIOSBIOSVersion"] = "FA506IV.320", ["Manufacturer"] = "American Megatrends Inc.", ["ReleaseDate"] = "20220531000000.000000+000" });
+            .AddWmi("Win32_BIOS", new() { ["SMBIOSBIOSVersion"] = "B550M.2801", ["Manufacturer"] = "American Megatrends Inc.", ["ReleaseDate"] = "20220531000000.000000+000" });
 
         var finding = Assert.Single(Run(new OldBiosCheck(), probe));
 
-        Assert.Contains(finding.Evidence, e => e.Contains("FA506IV.320") && e.Contains("31/05/2022"));
+        Assert.Contains(finding.Evidence, e => e.Contains("B550M.2801") && e.Contains("31/05/2022"));
     }
 
     [Fact]
@@ -330,7 +330,7 @@ public class StabilityChecksTests
     public void ModdedWindows_RegularOwner_ReportsNothing()
     {
         var probe = new FakeStabilityProbe()
-            .SetRegistry(RegistryHive.LocalMachine, CurrentVersion, "RegisteredOwner", "Zukuth")
+            .SetRegistry(RegistryHive.LocalMachine, CurrentVersion, "RegisteredOwner", "Usuario")
             .SetRegistry(RegistryHive.LocalMachine, CurrentVersion, "RegisteredOrganization", "");
 
         Assert.Empty(Run(new ModdedWindowsCheck(), probe));

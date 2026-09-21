@@ -29,9 +29,9 @@ public class SystemOverviewTests
     public void BoardBadges_ReportTpmSecureBootAndBiosYear()
     {
         var badges = SystemOverviewFactory.BoardBadges(tpmVersion: "2.0", secureBoot: true,
-            biosVersion: "FA506IV.320", biosDate: new DateTime(2022, 5, 31));
+            biosVersion: "B550M.2801", biosDate: new DateTime(2022, 5, 31));
 
-        Assert.Equal(new[] { "TPM 2.0", "Secure Boot activado", "BIOS FA506IV.320", "2022" },
+        Assert.Equal(new[] { "TPM 2.0", "Secure Boot activado", "BIOS B550M.2801", "2022" },
             badges.Select(b => b.Text));
         Assert.Equal(BadgeTone.Good, badges[0].Tone);
         Assert.Equal(BadgeTone.Good, badges[1].Tone);

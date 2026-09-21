@@ -7,10 +7,9 @@ por qué Windows se cuelga, reinicia o muestra pantallazos azules. Los hallazgos
 seguro llevan un botón **Arreglar** que usa el `TweakEngine` existente (backup + deshacer desde
 la sección Backup). Los problemas de hardware/BIOS solo muestran instrucciones.
 
-Origen: el diagnóstico manual del 2026-09-17 en un ASUS TUF A15 (FA506IV) con WinterOS encontró
-6 BugChecks con códigos distintos, error fatal del TPM, `TdrDelay=360`, políticas de Windows
-Update que desactivan protecciones, RAM mezclada y drivers de 2022. NexaTweaks no detectaba nada
-de eso.
+Origen: un diagnóstico manual sobre un portátil con Windows 11 modificado encontró 6 BugChecks
+con códigos distintos, error fatal del TPM, `TdrDelay=360`, políticas de Windows Update que
+desactivan protecciones, RAM mezclada y drivers de hace años. NexaTweaks no detectaba nada de eso.
 
 ## Arquitectura
 
